@@ -1,0 +1,28 @@
+{
+    "reservation":{
+        "reserved1":{
+            "Date": "2020-02-14",
+            "Building": "Planetarium",
+            "Time": "1:00pm",
+            "Adult": 20,
+            "Student": 80,
+            "School | Institution | Group": "STI College",
+            "Name": "Adam Steve",
+            "Contact Number": "092128123232",
+            "Email": "adam.steve@email.com",
+            "Status Confirmation": false,
+            "Status of Arrival": false
+        }
+    },
+    "billing":{
+        "reserved1":{
+            "Total of Person": 100,
+            "Price": 0
+        }
+    },
+    "payment":{
+        "reserved1":{
+            "status of Payment": "false"
+        }
+    }
+}

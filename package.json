@@ -1,0 +1,43 @@
+{
+  "name": "nmp",
+  "version": "0.0.1",
+  "description": "Online Reservation and Visitors Kiosk System for National Museum of the Philippines",
+  "productName": "NPM",
+  "cordovaId": "org.cordova.quasar.app",
+  "capacitorId": "",
+  "author": "Lites | Boyles | Nuñez | Jalmasco",
+  "private": true,
+  "scripts": {
+    "lint": "eslint --ext .js,.vue src",
+    "test": "echo \"No test specified\" && exit 0"
+  },
+  "dependencies": {
+    "@fullcalendar/core": "^4.3.1",
+    "@fullcalendar/daygrid": "^4.3.0",
+    "@fullcalendar/interaction": "^4.3.0",
+    "@fullcalendar/list": "^4.3.0",
+    "@fullcalendar/timegrid": "^4.3.0",
+    "@fullcalendar/vue": "^4.3.1",
+    "@quasar/extras": "^1.0.0",
+    "firebase": "^7.8.1",
+    "moment": "^2.24.0",
+    "quasar": "^1.0.0",
+    "vue-firestore": "^0.3.30"
+  },
+  "devDependencies": {
+    "@quasar/app": "^1.0.0",
+    "@vue/eslint-config-standard": "^4.0.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.10.0",
+    "eslint-loader": "^2.1.1",
+    "eslint-plugin-vue": "^5.0.0"
+  },
+  "engines": {
+    "node": ">= 10.18.1",
+    "npm": ">= 6.13.4",
+    "yarn": ">= 1.21.1"
+  },
+  "browserslist": [
+    "last 1 version, not dead, ie >= 11"
+  ]
+}
