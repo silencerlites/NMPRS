@@ -2,7 +2,9 @@
   <q-page class="q-pa-md">
     <div class="column">
       <div class="col-1 q-pb-md">
-        <span style="font-size:25px; color:#5a5c69!important;">Reservation List</span>
+        <span style="font-size:25px; color:#5a5c69!important;"
+          >Reservation List</span
+        >
         <q-btn
           color="green"
           label="Go Back"
@@ -11,25 +13,31 @@
         />
       </div>
       <!-- Add Registration -->
-      <q-dialog  v-model="addReg" persistent transition-show="scale" transition-hide="scale" style="max-width: 2000px">
-        <template>
-    <q-stepper
-      v-model="step"
-      ref="stepper"
-      animated
-      active-color="purple"
-      style="max-width: 2000px"
-    >
-      <q-step
-        :name="1"
-        title="Select Museum Availability"
-        icon="settings"
-        style="min-height: 100px"
-        :done="step > 1"
+      <q-dialog
+        v-model="addReg"
+        persistent
+        transition-show="scale"
+        transition-hide="scale"
+        style="max-width: 2000px"
       >
-        <div class="col-12">
-           <div class="col-12">
-                 Select Museum
+        <template>
+          <q-stepper
+            v-model="step"
+            ref="stepper"
+            animated
+            active-color="purple"
+            style="max-width: 2000px"
+          >
+            <q-step
+              :name="1"
+              title="Select Museum Availability"
+              icon="settings"
+              style="min-height: 100px"
+              :done="step > 1"
+            >
+              <div class="col-12">
+                <div class="col-12">
+                  Select Museum
                   <q-select
                     outlined
                     name="AvailBuild"
@@ -39,77 +47,85 @@
                     option-label="NameBuilding"
                   />
                 </div>
-              Date
-              <q-input outlined v-model="date">
-                <template v-slot:append>
-                  <q-icon name="event" class="cursor-pointer">
-                    <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                      <q-date
-                        v-model="date"
-                        @input="() => $refs.qDateProxy.hide()"
-                        mask="YYYY-MM-DD"
-                        :options="dateRuleOptions"
-                      />
-                    </q-popup-proxy>
-                  </q-icon>
-                </template>
-              </q-input>
-            </div>
-            <!-- checkbox -->
-            <div class="col-12">
-              <q-list>
-                <!--
+                Date
+                <q-input outlined v-model="date">
+                  <template v-slot:append>
+                    <q-icon name="event" class="cursor-pointer">
+                      <q-popup-proxy
+                        ref="qDateProxy"
+                        transition-show="scale"
+                        transition-hide="scale"
+                      >
+                        <q-date
+                          v-model="date"
+                          @input="() => $refs.qDateProxy.hide()"
+                          mask="YYYY-MM-DD"
+                          :options="dateRuleOptions"
+                        />
+                      </q-popup-proxy>
+                    </q-icon>
+                  </template>
+                </q-input>
+              </div>
+              <!-- checkbox -->
+              <div class="col-12">
+                <q-list>
+                  <!--
                 Rendering a <label> tag (notice tag="label")
                 so QCheckboxes will respond to clicks on QItems to
                 change Toggle state.
                 -->
-                <!-- <q-option-group
+                  <!-- <q-option-group
                   :options="Building"
                   label="NameBuilding"
                   val="id"
                   type="checkbox"
                   v-model="Reserve.Museum.Building"
                 /> -->
-                <div class="col-12">
-                  Time
-                  <q-select
-                    outlined
-                    name="timeRS"
-                    color="purple-12"
-                    v-model="Museum.Times"
-                    :options="OperationHours"
-                    option-value="id"
-                    option-label="Hour"
-                  />
-                </div>
-              </q-list>
-              <!-- <div class="q-px-sm q-mt-sm" style="visibility: hidden;">
+                  <div class="col-12">
+                    Time
+                    <q-select
+                      outlined
+                      name="timeRS"
+                      color="purple-12"
+                      v-model="Museum.Times"
+                      :options="OperationHours"
+                      option-value="id"
+                      option-label="Hour"
+                    />
+                  </div>
+                </q-list>
+                <!-- <div class="q-px-sm q-mt-sm" style="visibility: hidden;">
             Your selection is: <strong>{{ color }}</strong>
               </div>-->
-            </div>
-      </q-step>
+              </div>
+            </q-step>
 
-      <q-step
-        :name="2"
-        title="Reservation Information"
-        icon="create_new_folder"
-        style="min-height: 100px"
-        :done="step > 2"
-      >
-       <div class="col-12">
-            Name of School | Institution | Group
-            <q-input outlined v-model="title"/>
-            </div>
-      </q-step>
+            <q-step
+              :name="2"
+              title="Reservation Information"
+              icon="create_new_folder"
+              style="min-height: 100px"
+              :done="step > 2"
+            >
+              <div class="col-12">
+                Name of School | Institution | Group
+                <q-input outlined v-model="title" />
+              </div>
+            </q-step>
 
-      <q-step
-        :name="3"
-        title="List of Visitors"
-        icon="add_comment"
-        style="min-height: 100px"
-        :done="step > 3"
-      >
-              <div v-for="(line, index) in lines" :key="index" class="row q-pb-md">
+            <q-step
+              :name="3"
+              title="List of Visitors"
+              icon="add_comment"
+              style="min-height: 100px"
+              :done="step > 3"
+            >
+              <div
+                v-for="(line, index) in lines"
+                :key="index"
+                class="row q-pb-md"
+              >
                 <q-card class="my-card q-pa-sm bg-grey-1 col-12" flat bordered>
                   <div class="row">
                     <div class="col-6 q-pr-md">
@@ -128,7 +144,12 @@
                   </div>
                   <div class="col-12">
                     Gender
-                    <q-option-group :options="Genders" type="radio" v-model="line.Gender" inline />
+                    <q-option-group
+                      :options="Genders"
+                      type="radio"
+                      v-model="line.Gender"
+                      inline
+                    />
                   </div>
                   <div class="col-12">
                     Type of Visitor
@@ -176,96 +197,139 @@
                   </q-card-actions>
                 </q-card>
               </div>
-      </q-step>
+            </q-step>
 
-       <q-step
-        :name="4"
-        title="Contact Information"
-        icon="add_comment"
-        style="min-height: 100px"
-        :done="step > 4"
-      >
-      <div class="col-12">
-              Name
-              <q-input outlined v-model="ConUser.Name" />
-            </div>
-            <div class="col-6">
-              Contact Number
-              <q-input outlined v-model="ConUser.ConNum" />
-            </div>
-            <div class="col-6">
-              Email
-              <q-input outlined v-model="ConUser.Email" />
-            </div>
+            <q-step
+              :name="4"
+              title="Contact Information"
+              icon="add_comment"
+              style="min-height: 100px"
+              :done="step > 4"
+            >
+              <div class="col-12">
+                Name
+                <q-input outlined v-model="ConUser.Name" />
+              </div>
+              <div class="col-6">
+                Contact Number
+                <q-input outlined v-model="ConUser.ConNum" />
+              </div>
+              <div class="col-6">
+                Email
+                <q-input outlined v-model="ConUser.Email" />
+              </div>
+            </q-step>
 
-      </q-step>
+            <q-step
+              :name="5"
+              title="Billing"
+              icon="add_comment"
+              style="min-height: 100px"
+              :done="step > 5"
+            >
+              <div class="row">
+                <div class="col-6">
+                  <div class="text-h6">Billing Details</div>
+                  Name: <b> {{ this.title }} </b> <br />
+                  Building: <b> {{ this.Museum.Building.NameBuilding }} </b>
+                  <br />
+                  Date: <b> {{ this.date }} </b> <br />
+                  Time: <b> {{ this.Museum.Times.Hour }} </b> <br />
+                  Number's of Visitors: <b> {{ this.lines.length }} </b> <br />
+                  Amount: <b> {{ this.Museum.Building.Fees }} </b> <br />
+                  Total:
+                  <b>
+                    {{ this.lines.length * this.Museum.Building.Fees }}
+                  </b>
+                </div>
+                <div class="col-6">
+                  <div class="text-h6">Payment Method</div>
+                  Mode of Payment <br />
+                  <div class="q-gutter-sm">
+                    <q-radio v-model="method" val="Cash" label="Cash" />
+                    <q-radio v-model="method" val="Card" label="Card" />
+                  </div>
+                  <div>
+                    <template>
+                      <div id="app">
+                        <card
+                          class="stripe-card"
+                          :class="{ complete }"
+                          stripe="pk_test_vqR369WnqQuVam22cDEZaWXh00Fao7K3bT"
+                          :options="stripeOptions"
+                          @change="complete = $event.complete"
+                        />
+                        <button
+                          class="pay-with-stripe"
+                          @click="placeOrderButtonPressed"
+                        >
+                          Pay with credit card
+                        </button>
+                      </div>
+                    </template>
+                  </div>
+                </div>
+              </div>
+            </q-step>
 
-       <q-step
-        :name="5"
-        title="Billing"
-        icon="add_comment"
-        style="min-height: 100px"
-        :done="step > 5"
-      >
+            <q-step
+              :name="6"
+              title="Finish"
+              icon="add_comment"
+              style="min-height: 100px"
+            >
+            </q-step>
 
-      <div class="row">
-          <div class="col-6">
-        <div class="text-h6">Billing Details</div>
-        Name: <b> {{ this.title }} </b> <br>
-        Building: <b> {{ this.Museum.Building.NameBuilding }} </b> <br>
-        Date: <b> {{ this.date }} </b> <br>
-        Time: <b> {{ this.Museum.Times.Hour }} </b> <br>
-        Number's of Visitors: <b> {{ this.lines.length }} </b> <br>
-        Amount: <b> {{ this.Museum.Building.Fees }} </b> <br>
-        Total: <b> {{this.NumberofVisitor * this.Museum.Building.Fees}} </b>
-          </div>
-           <div class="col-6">
-        <div class="text-h6">Payment Method</div>
-        Mode of Payment <br>
-        <div class="q-gutter-sm">
-      <q-radio v-model="method" val="Cash" label="Cash" />
-      <q-radio v-model="method" val="Card" label="Card" />
-    </div>
-
-          </div>
-
-       </div>
-
-      </q-step>
-
-       <q-step
-        :name="6"
-        title="Finish"
-        icon="add_comment"
-        style="min-height: 100px"
-      >
-      </q-step>
-
-      <template v-slot:navigation>
-        <q-stepper-navigation>
-          <q-btn v-close-popup="step === 6" @click="$refs.stepper.next(), addReservation()" color="deep-orange" :label="step === 5 ? 'Reserve' : 'Continue'" v-if="modalbtn == 'add'"/>
-          <q-btn v-close-popup="step === 6" @click="$refs.stepper.next(), editRow()" color="deep-orange" :label="step === 5 ? 'Reserve' : 'Continue'" v-if="modalbtn == 'edit'"/>
-          <!-- <q-btn v-if="step === 4" v-close-popup flat color="red" label="Reservation" @click="addReservation()" /> -->
-          <q-btn v-if="step > 1" flat color="deep-orange" @click="$refs.stepper.previous()" label="Back" class="q-ml-sm" />
-          <q-btn v-close-popup flat color="red" label="Cancel" />
-        </q-stepper-navigation>
-      </template>
-    </q-stepper>
-
-    </template>
-    </q-dialog>
+            <template v-slot:navigation>
+              <q-stepper-navigation>
+                <q-btn
+                  v-close-popup="step === 6"
+                  @click="$refs.stepper.next(), addReservation()"
+                  color="deep-orange"
+                  :label="step === 5 ? 'Reserve' : 'Continue'"
+                  v-if="modalbtn == 'add'"
+                />
+                <q-btn
+                  v-close-popup="step === 6"
+                  @click="$refs.stepper.next(), editRow()"
+                  color="deep-orange"
+                  :label="step === 5 ? 'Reserve' : 'Continue'"
+                  v-if="modalbtn == 'edit'"
+                />
+                <!-- <q-btn v-if="step === 4" v-close-popup flat color="red" label="Reservation" @click="addReservation()" /> -->
+                <q-btn
+                  v-if="step > 1"
+                  flat
+                  color="deep-orange"
+                  @click="$refs.stepper.previous()"
+                  label="Back"
+                  class="q-ml-sm"
+                />
+                <q-btn v-close-popup flat color="red" label="Cancel" />
+              </q-stepper-navigation>
+            </template>
+          </q-stepper>
+        </template>
+      </q-dialog>
     </div>
 
     <div class="row">
       <q-dialog v-model="alertDelete">
         <q-card>
           <q-card-section>
-            <img src="statics/undraw_throw_away_ldjd.svg" alt style="height:250px" class="q-pa-lg" />
+            <img
+              src="statics/undraw_throw_away_ldjd.svg"
+              alt
+              style="height:250px"
+              class="q-pa-lg"
+            />
           </q-card-section>
 
           <q-card-section class="q-pt-none">
             <div class="text-h4 text-center">Are you Sure?</div>
-            <div class="text-h9 text-center">You won't be able to revert this!</div>
+            <div class="text-h9 text-center">
+              You won't be able to revert this!
+            </div>
           </q-card-section>
 
           <q-card-actions align="center" class="q-pa-md q-pb-lg">
@@ -282,7 +346,7 @@
         </q-card>
       </q-dialog>
 
-       <template>
+      <template>
         <div class="col-xs-12 col-sm-12 col-md-12">
           <q-table
             title="Reservation Details"
@@ -290,21 +354,25 @@
             :columns="columns"
             row-key="id"
           >
-           <template v-slot:top-right>
-        <q-btn
-          color="green"
-          label="ADD"
-          style="float:right;"
-          @click="modalbtn = 'add' , addReg = true ,  step = 1"
-        />
-          </template>
+            <template v-slot:top-right>
+              <q-btn
+                color="green"
+                label="ADD"
+                style="float:right;"
+                @click="(modalbtn = 'add'), (addReg = true), (step = 1)"
+              />
+            </template>
             <template v-slot:body="props">
               <q-tr :props="props">
-                <q-td :props="props" key="date">{{props.row.date}}</q-td>
-                <q-td :props="props" key="time">{{props.row.time}}</q-td>
-                <q-td :props="props" key="building">{{props.row.Building.NameBuilding}}</q-td>
-                <q-td :props="props" key="school">{{props.row.title}}</q-td>
-                <q-td :props="props" key="pax">{{props.row.NumberofVisitor}}</q-td>
+                <q-td :props="props" key="date">{{ props.row.date }}</q-td>
+                <q-td :props="props" key="time">{{ props.row.time }}</q-td>
+                <q-td :props="props" key="building">{{
+                  props.row.Building.NameBuilding
+                }}</q-td>
+                <q-td :props="props" key="school">{{ props.row.title }}</q-td>
+                <q-td :props="props" key="pax">{{
+                  props.row.NumberofVisitor
+                }}</q-td>
                 <q-td auto-width key="action">
                   <q-btn
                     dense
@@ -312,14 +380,14 @@
                     flat
                     color="grey"
                     icon="edit"
-                    @click=" modalbtn = 'edit', editModal(props.row)"
+                    @click="(modalbtn = 'edit'), editModal(props.row)"
                   ></q-btn>
                   <q-btn
                     dense
                     round
                     flat
                     color="grey"
-                    @click=" delalert(props.row)"
+                    @click="delalert(props.row)"
                     icon="delete"
                   ></q-btn>
                 </q-td>
@@ -334,12 +402,11 @@
 
 <script>
 import { firestore } from 'boot/firebase'
+import { Card, createToken } from 'vue-stripe-elements-plus'
 
 export default {
   name: 'PageIndex',
-  components: {
-
-  },
+  components: { Card },
   data () {
     return {
       method: '',
@@ -422,11 +489,23 @@ export default {
       Genders: firestore.collection('Gender'),
       reservations: firestore.collection('Reservation'),
       Building: firestore.collection('MuseumBuilding'),
-      OperationHours: firestore.collection('OperationHours'),
-      fusion: firestore.collection('Reservation') && firestore.collection('VisitorsLog')
+      OperationHours: firestore.collection('OperationHours')
     }
   },
   methods: {
+    placeOrderButtonPressed () {
+      createToken().then(result => {
+        if (result.error) {
+          this.stripeValidationError = result.error.message
+        } else {
+          var stripeObject = {
+            amount: this.amount,
+            source: result.token
+          }
+          this.saveDataToFireStore(stripeObject)
+        }
+      })
+    },
     addLine () {
       // let checkEmptyLines = this.lines.filter(line => line.FirstN === null)
       // if (checkEmptyLines.length >= 1 && this.lines.length > 0) {
@@ -454,7 +533,8 @@ export default {
             Building: this.Museum.Building,
             Contact: this.ConUser
           }
-          this.$firestore.reservations.add(Reserve)
+          this.$firestore.reservations
+            .add(Reserve)
             .then(docRef => {
               this.$firestore.VisitorL.doc(docRef.id).set({
                 Building: this.Museum.Building,
@@ -523,7 +603,9 @@ export default {
             date: this.date + 'T' + this.Museum.Times.Hour,
             visitorType: 'reservation'
           }
-          this.$firestore.reservations.doc(this.Reserve.id).update(Reserve)
+          this.$firestore.reservations
+            .doc(this.Reserve.id)
+            .update(Reserve)
             .then(docRef => {
               this.$firestore.VisitorL.doc(this.Reserve.id).update(vst)
             })
@@ -553,7 +635,9 @@ export default {
     },
     deleteRow () {
       try {
-        this.$firestore.reservations.doc(this.Reserve.id).delete()
+        this.$firestore.reservations
+          .doc(this.Reserve.id)
+          .delete()
           .then(docRef => {
             this.$firestore.VisitorL.doc(this.Reserve.id).delete()
           })
@@ -580,9 +664,36 @@ export default {
   },
   mounted () {
     this.addLine()
-    this.$binding('visitorsLog', firestore.collection('VisitorLog'))
-    this.$mount.visitorsLog.firestore.collection('VisitorLog')
-    this.$firestore.VisitorL = this.visitorsLog
+    // eslint-disable-next-line no-undef
+    this.stripe = Stripe('pk_test_vqR369WnqQuVam22cDEZaWXh00Fao7K3bT')
+    this.createAndMountFormElements()
   }
 }
 </script>
+
+<style>
+.payment-form {
+  max-width: 400px;
+  margin: 20px auto;
+  border: 1px solid #ececec;
+}
+.payment-form h5 {
+  margin: 0;
+  padding: 10px;
+  font-size: 1.2rem;
+}
+.card-element {
+  margin-top: 5px;
+}
+#card-number-element,
+#card-expiry-element,
+#card-cvc-element {
+  background: white;
+  padding: 5px;
+  border: 1px solid #ececec;
+  height: 30px;
+}
+.place-order-button-block {
+  margin: 10px 0;
+}
+</style>

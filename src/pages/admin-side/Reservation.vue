@@ -17,15 +17,6 @@
     <div class="col-xs-12 col-sm-12 col-md-12">
       <q-card class="my-card">
         <q-card-section>
-          <div class>
-            <div class="q-gutter-sm" style="text-align:left;">
-              <q-btn color="primary" label="All" />
-              <q-btn color="primary" label="Planetarium" />
-              <q-btn color="primary" label="Natural History" />
-              <q-btn color="primary" label="Anthropology" />
-              <q-btn color="primary" label="Fine Arts" />
-            </div>
-          </div>
           <FullCalendar />
         </q-card-section>
       </q-card>
