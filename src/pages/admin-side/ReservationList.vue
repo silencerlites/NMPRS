@@ -2,15 +2,8 @@
   <q-page class="q-pa-md">
     <div class="column">
       <div class="col-1 q-pb-md">
-        <span style="font-size:25px; color:#5a5c69!important;"
-          >Reservation List</span
-        >
-        <q-btn
-          color="green"
-          label="Go Back"
-          style="float:right;"
-          to="/adminSide/reservation"
-        />
+        <span style="font-size:25px; color:#5a5c69!important;">Reservation List</span>
+        <q-btn color="green" label="Go Back" style="float:right;" to="/adminSide/reservation" />
       </div>
       <!-- Add Registration -->
       <q-dialog
@@ -46,8 +39,7 @@
                     option-value="id"
                     option-label="NameBuilding"
                   />
-                </div>
-                Date
+                </div>Date
                 <q-input outlined v-model="date">
                   <template v-slot:append>
                     <q-icon name="event" class="cursor-pointer">
@@ -74,14 +66,14 @@
                 Rendering a <label> tag (notice tag="label")
                 so QCheckboxes will respond to clicks on QItems to
                 change Toggle state.
-                -->
+                  -->
                   <!-- <q-option-group
                   :options="Building"
                   label="NameBuilding"
                   val="id"
                   type="checkbox"
                   v-model="Reserve.Museum.Building"
-                /> -->
+                  />-->
                   <div class="col-12">
                     Time
                     <q-select
@@ -97,7 +89,7 @@
                 </q-list>
                 <!-- <div class="q-px-sm q-mt-sm" style="visibility: hidden;">
             Your selection is: <strong>{{ color }}</strong>
-              </div>-->
+                </div>-->
               </div>
             </q-step>
 
@@ -121,11 +113,7 @@
               style="min-height: 100px"
               :done="step > 3"
             >
-              <div
-                v-for="(line, index) in lines"
-                :key="index"
-                class="row q-pb-md"
-              >
+              <div v-for="(line, index) in lines" :key="index" class="row q-pb-md">
                 <q-card class="my-card q-pa-sm bg-grey-1 col-12" flat bordered>
                   <div class="row">
                     <div class="col-6 q-pr-md">
@@ -144,12 +132,7 @@
                   </div>
                   <div class="col-12">
                     Gender
-                    <q-option-group
-                      :options="Genders"
-                      type="radio"
-                      v-model="line.Gender"
-                      inline
-                    />
+                    <q-option-group :options="Genders" type="radio" v-model="line.Gender" inline />
                   </div>
                   <div class="col-12">
                     Type of Visitor
@@ -229,56 +212,52 @@
             >
               <div class="row">
                 <div class="col-6">
-                  <div class="text-h6">Billing Details</div>
-                  Name: <b> {{ this.title }} </b> <br />
-                  Building: <b> {{ this.Museum.Building.NameBuilding }} </b>
-                  <br />
-                  Date: <b> {{ this.date }} </b> <br />
-                  Time: <b> {{ this.Museum.Times.Hour }} </b> <br />
-                  Number's of Visitors: <b> {{ this.lines.length }} </b> <br />
-                  Amount: <b> {{ this.Museum.Building.Fees }} </b> <br />
-                  Total:
-                  <b>
-                    {{ this.lines.length * this.Museum.Building.Fees }}
-                  </b>
+                  <div class="text-h6">Billing Details</div>Name:
+                  <b>{{ this.title }}</b>
+                  <br />Building:
+                  <b>{{ this.Museum.Building.NameBuilding }}</b>
+                  <br />Date:
+                  <b>{{ this.date }}</b>
+                  <br />Time:
+                  <b>{{ this.Museum.Times.Hour }}</b>
+                  <br />Number's of Visitors:
+                  <b>{{ this.lines.length }}</b>
+                  <br />Amount:
+                  <b>{{ this.Museum.Building.Fees }}</b>
+                  <br />Total:
+                  <b>{{ this.lines.length * this.Museum.Building.Fees }}</b>
                 </div>
                 <div class="col-6">
-                  <div class="text-h6">Payment Method</div>
-                  Mode of Payment <br />
+                  <div class="text-h6">Payment Method</div>Mode of Payment
+                  <br/>
                   <div class="q-gutter-sm">
-                    <q-radio v-model="method" val="Cash" label="Cash" />
-                    <q-radio v-model="method" val="Card" label="Card" />
+                    <q-radio v-model="method" val="Cash"  label="Cash" />
+                    <q-radio v-model="method" value="Card" label="Card" />
                   </div>
-                  <div>
+                  <div v-if="method === Card" v-show="!card">
                     <template>
-                      <div id="app">
-                        <card
+                        <div class="my-card q-pt-sm q-pb-sm">
+                          Credit or debit card
+                          <card
                           class="stripe-card"
                           :class="{ complete }"
                           stripe="pk_test_vqR369WnqQuVam22cDEZaWXh00Fao7K3bT"
-                          :options="stripeOptions"
                           @change="complete = $event.complete"
                         />
-                        <button
-                          class="pay-with-stripe"
+                        </div>
+                        <q-btn
                           @click="placeOrderButtonPressed"
-                        >
-                          Pay with credit card
-                        </button>
-                      </div>
+                          :disabled="!complete"
+                          color="green"
+                          label="PAY"
+                        />
                     </template>
                   </div>
                 </div>
               </div>
             </q-step>
 
-            <q-step
-              :name="6"
-              title="Finish"
-              icon="add_comment"
-              style="min-height: 100px"
-            >
-            </q-step>
+            <q-step :name="6" title="Finish" icon="add_comment" style="min-height: 100px"></q-step>
 
             <template v-slot:navigation>
               <q-stepper-navigation>
@@ -317,19 +296,12 @@
       <q-dialog v-model="alertDelete">
         <q-card>
           <q-card-section>
-            <img
-              src="statics/undraw_throw_away_ldjd.svg"
-              alt
-              style="height:250px"
-              class="q-pa-lg"
-            />
+            <img src="statics/undraw_throw_away_ldjd.svg" alt style="height:250px" class="q-pa-lg" />
           </q-card-section>
 
           <q-card-section class="q-pt-none">
             <div class="text-h4 text-center">Are you Sure?</div>
-            <div class="text-h9 text-center">
-              You won't be able to revert this!
-            </div>
+            <div class="text-h9 text-center">You won't be able to revert this!</div>
           </q-card-section>
 
           <q-card-actions align="center" class="q-pa-md q-pb-lg">
@@ -366,13 +338,17 @@
               <q-tr :props="props">
                 <q-td :props="props" key="date">{{ props.row.date }}</q-td>
                 <q-td :props="props" key="time">{{ props.row.time }}</q-td>
-                <q-td :props="props" key="building">{{
+                <q-td :props="props" key="building">
+                  {{
                   props.row.Building.NameBuilding
-                }}</q-td>
+                  }}
+                </q-td>
                 <q-td :props="props" key="school">{{ props.row.title }}</q-td>
-                <q-td :props="props" key="pax">{{
+                <q-td :props="props" key="pax">
+                  {{
                   props.row.NumberofVisitor
-                }}</q-td>
+                  }}
+                </q-td>
                 <q-td auto-width key="action">
                   <q-btn
                     dense
@@ -382,14 +358,7 @@
                     icon="edit"
                     @click="(modalbtn = 'edit'), editModal(props.row)"
                   ></q-btn>
-                  <q-btn
-                    dense
-                    round
-                    flat
-                    color="grey"
-                    @click="delalert(props.row)"
-                    icon="delete"
-                  ></q-btn>
+                  <q-btn dense round flat color="grey" @click="delalert(props.row)" icon="delete"></q-btn>
                 </q-td>
               </q-tr>
             </template>
@@ -401,6 +370,7 @@
 </template>
 
 <script>
+import firebase from 'firebase'
 import { firestore } from 'boot/firebase'
 import { Card, createToken } from 'vue-stripe-elements-plus'
 
@@ -409,7 +379,10 @@ export default {
   components: { Card },
   data () {
     return {
-      method: '',
+      card: false,
+      amount: null,
+      complete: false,
+      method: ['Card', 'Cash'],
       title: null,
       date: '',
       Museum: {
@@ -489,7 +462,8 @@ export default {
       Genders: firestore.collection('Gender'),
       reservations: firestore.collection('Reservation'),
       Building: firestore.collection('MuseumBuilding'),
-      OperationHours: firestore.collection('OperationHours')
+      OperationHours: firestore.collection('OperationHours'),
+      Payment: firestore.collection('Payment')
     }
   },
   methods: {
@@ -499,10 +473,36 @@ export default {
           this.stripeValidationError = result.error.message
         } else {
           var stripeObject = {
-            amount: this.amount,
+            amount: this.lines.length * this.Museum.Building.Fees,
             source: result.token
           }
+
           this.saveDataToFireStore(stripeObject)
+        }
+      })
+    },
+
+    saveDataToFireStore (stripeObject) {
+      const db = firebase.firestore()
+      const chargesRef = db.collection('payment')
+      const pushId = chargesRef.doc().id
+
+      db.collection('payment')
+        .doc(pushId)
+        .set(stripeObject)
+
+      chargesRef.doc(pushId).onSnapshot(snapShot => {
+        const charge = snapShot.data()
+
+        if (charge.error) {
+          alert(charge.error)
+          chargesRef.doc(pushId).delete()
+          return
+        }
+
+        // eslint-disable-next-line eqeqeq
+        if (charge.status && charge.status == 'succeeded') {
+          alert(charge.status)
         }
       })
     },
@@ -665,35 +665,20 @@ export default {
   mounted () {
     this.addLine()
     // eslint-disable-next-line no-undef
-    this.stripe = Stripe('pk_test_vqR369WnqQuVam22cDEZaWXh00Fao7K3bT')
-    this.createAndMountFormElements()
   }
 }
 </script>
 
 <style>
-.payment-form {
-  max-width: 400px;
-  margin: 20px auto;
-  border: 1px solid #ececec;
-}
-.payment-form h5 {
-  margin: 0;
-  padding: 10px;
-  font-size: 1.2rem;
-}
-.card-element {
-  margin-top: 5px;
-}
-#card-number-element,
-#card-expiry-element,
-#card-cvc-element {
-  background: white;
-  padding: 5px;
-  border: 1px solid #ececec;
-  height: 30px;
-}
-.place-order-button-block {
-  margin: 10px 0;
+.stripe-card {
+  box-sizing: border-box;
+  height: 40px;
+  padding: 8px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background-color: white;
+  box-shadow: 0 1px 3px 0 #e6ebf1;
+  -webkit-transition: box-shadow 150ms ease;
+  transition: box-shadow 150ms ease;
 }
 </style>

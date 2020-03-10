@@ -9,29 +9,35 @@ const cors = require("cors")({ origin: true });
 //  response.send("Hello from Firebase!");
 // });
 
-exports.checkoutSessions = functions.https.onRequest((request, response) => {
-  cors(request, response, () => {
-    // ...
-    stripe.checkout.sessions.create(
-      {
-        success_url: "https://example.com/success",
-        cancel_url: "https://example.com/cancel",
-        payment_method_types: ["card"],
-        line_items: [
-          {
-            name: "T-shirt",
-            description: "Comfortable cotton t-shirt",
-            amount: 1500,
-            currency: "usd",
-            quantity: 2
-          }
-        ]
-      },
-      (err, session) => {
-        // asynchronously called
-        response.send(session);
-        console.log(err);
-      }
-    );
+exports.createStripeCharge = functions.firestore
+  .document("payment/{pushId}")
+  .onCreate(async (snap, context) => {
+    try {
+      const charge = {
+        amount: snap.data().amount * 100,
+        source: snap.data().source.id,
+        currency: "PHP"
+      };
+      const idempotencyKey = context.params.pushId;
+      const response = await stripe.charges.create(charge, {
+        idempotency_key: idempotencyKey
+      });
+      await snap.ref.set(response, {
+        merge: true
+      });
+    } catch (error) {
+      await snap.ref.set(
+        {
+          error: userFacingMessage(error)
+        },
+        {
+          merge: true
+        }
+      );
+    }
   });
-});
+function userFacingMessage(error) {
+  return error.type
+    ? error.message
+    : "An error occurred, developers have been alerted";
+}
