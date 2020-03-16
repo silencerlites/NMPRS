@@ -5,7 +5,7 @@
       <q-toolbar>
         <q-toolbar-title>
           <img src="statics/app-logo-80x.svg" style="width:70px;" class="col-12">
-          <span style="font-size:40px; color:#6B1510;"> National Museum of the Philippines</span>
+          <span style="font-size:40px; color:#6B1510;">National Museum of the Philippines</span>
         </q-toolbar-title>
         <q-btn flat style="font-size:28px; color: #6B1510;" label="Home" />
         <q-btn flat style="font-size:28px; color: #6B1510;" label="Apps" />

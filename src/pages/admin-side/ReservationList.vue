@@ -16,9 +16,10 @@
         <template>
           <q-stepper
             v-model="step"
+            header-nav
             ref="stepper"
+            color="primary"
             animated
-            active-color="purple"
             style="max-width: 2000px"
           >
             <q-step
@@ -59,21 +60,8 @@
                   </template>
                 </q-input>
               </div>
-              <!-- checkbox -->
               <div class="col-12">
                 <q-list>
-                  <!--
-                Rendering a <label> tag (notice tag="label")
-                so QCheckboxes will respond to clicks on QItems to
-                change Toggle state.
-                  -->
-                  <!-- <q-option-group
-                  :options="Building"
-                  label="NameBuilding"
-                  val="id"
-                  type="checkbox"
-                  v-model="Reserve.Museum.Building"
-                  />-->
                   <div class="col-12">
                     Time
                     <q-select
@@ -87,10 +75,11 @@
                     />
                   </div>
                 </q-list>
-                <!-- <div class="q-px-sm q-mt-sm" style="visibility: hidden;">
-            Your selection is: <strong>{{ color }}</strong>
-                </div>-->
               </div>
+              <q-stepper-navigation>
+                <q-btn @click="() => { step = 2 }" color="primary" label="Continue" />
+                <q-btn v-close-popup flat color="red" label="Cancel" />
+              </q-stepper-navigation>
             </q-step>
 
             <q-step
@@ -104,6 +93,12 @@
                 Name of School | Institution | Group
                 <q-input outlined v-model="title" />
               </div>
+
+              <q-stepper-navigation>
+                <q-btn @click="() => { step = 3 }" color="primary" label="Continue" />
+                <q-btn flat @click="step = 1" color="primary" label="Back" class="q-ml-sm" />
+                <q-btn v-close-popup flat color="red" label="Cancel" />
+              </q-stepper-navigation>
             </q-step>
 
             <q-step
@@ -180,8 +175,12 @@
                   </q-card-actions>
                 </q-card>
               </div>
+              <q-stepper-navigation>
+                <q-btn @click="() => { step = 4 }" color="primary" label="Continue" />
+                <q-btn flat @click="step = 2" color="primary" label="Back" class="q-ml-sm" />
+                <q-btn v-close-popup flat color="red" label="Cancel" />
+              </q-stepper-navigation>
             </q-step>
-
             <q-step
               :name="4"
               title="Contact Information"
@@ -201,92 +200,171 @@
                 Email
                 <q-input outlined v-model="ConUser.Email" />
               </div>
-            </q-step>
 
+              <q-stepper-navigation>
+                <q-btn @click="() => { step = 5 }" color="primary" label="Continue" />
+                <q-btn flat @click="step = 3" color="primary" label="Back" class="q-ml-sm" />
+                <q-btn v-close-popup flat color="red" label="Cancel" />
+              </q-stepper-navigation>
+            </q-step>
             <q-step
               :name="5"
-              title="Billing"
+              title="Billing & Payment"
               icon="add_comment"
               style="min-height: 100px"
               :done="step > 5"
             >
               <div class="row">
-                <div class="col-6">
-                  <div class="text-h6">Billing Details</div>Name:
-                  <b>{{ this.title }}</b>
-                  <br />Building:
-                  <b>{{ this.Museum.Building.NameBuilding }}</b>
-                  <br />Date:
-                  <b>{{ this.date }}</b>
-                  <br />Time:
-                  <b>{{ this.Museum.Times.Hour }}</b>
-                  <br />Number's of Visitors:
-                  <b>{{ this.lines.length }}</b>
-                  <br />Amount:
-                  <b>{{ this.Museum.Building.Fees }}</b>
-                  <br />Total:
-                  <b>{{ this.lines.length * this.Museum.Building.Fees }}</b>
+                <div class="col-12">
+                  <q-card>
+                  <q-card-section vertical>
+                    <br>
+                    <div style="text-align:right">
+                      <img src="statics/app-logo-80x.svg" style="width:50px;" class="q-mr-lg">
+                      <span style="font-size:30px; color:#6B1510;">National Museum of the Philippines</span>
+                    </div>
+                    <q-separator style="background:#6B1510" class="q-mb-xs q-mt-xs"/>
+                    <br>
+                    <div class="row">
+                      <div class="col-8">
+                        Name: <br>
+                        <b class="text-h5 ">{{ this.ConUser.Name}}</b>
+                      </div>
+                      <div class="col-4" style="float-right">
+                        <q-icon name="phone_android" size="1.3rem"/> {{  this.ConUser.ConNum}} <br>
+                        <q-icon name="mail" size="1.3rem"/> {{ this.ConUser.Email}}
+                      </div>
+                    </div>
+                    <q-separator  class="q-mb-sm q-mt-sm"/>
+                    <b style="color:#6B1510">Reservation Details</b>
+                    <q-separator  class="q-mb-sm q-mt-sm"/>
+                    <div class="row q-mt-sm">
+                      <div class="col-8">
+                        Building: <br>
+                        <b class="text-h7 ">{{ this.Museum.Building.NameBuilding }}</b>
+                      </div>
+                      <div class="col-4">
+                        Date: {{ this.date | timeformatDate }} <br>
+                        Time: {{ this.date + 'T' + this.Museum.Times.Hour | timeformatTime }}
+                      </div>
+                    </div>
+                    <div class="row q-mt-xs">
+                      <div class="col-8">
+                        Name of School | Institution | Group: <br>
+                        <b class="text-h7 ">{{ this.title }}</b>
+                      </div>
+                      <div class="col-4" >
+                        Number of Visitors: <br>
+                        <b class="text-h7 ">{{ this.lines.length }} </b>
+                      </div>
+                    </div>
+                    <q-separator  class="q-mb-sm q-mt-sm"/>
+                    <b style="color:#6B1510">Billing Details</b>
+                    <q-separator  class="q-mb-sm q-mt-sm"/>
+                    <div class="row q-mt-xs">
+                      <div class="col-8">
+                        Building Fee: <br>
+                        <b class="text-h7 "> &#x20B1; {{ this.Museum.Building.Fees }}</b>
+                      </div>
+                      <div class="col-4" >
+                        Total Amount : <br>
+                        <b class="text-h6" style="color:#d35400"> &#x20B1; {{ this.lines.length * this.Museum.Building.Fees }} </b>
+                      </div>
+                    </div>
+                  </q-card-section>
+                </q-card>
                 </div>
-                <div class="col-6">
-                  <div class="text-h6">Payment Method</div>Mode of Payment
-                  <br/>
-                  <div class="q-gutter-sm">
-                    <q-radio v-model="method" val="Cash"  label="Cash" />
-                    <q-radio v-model="method" value="Card" label="Card" />
-                  </div>
-                  <div v-if="method === Card" v-show="!card">
-                    <template>
-                        <div class="my-card q-pt-sm q-pb-sm">
-                          Credit or debit card
-                          <card
-                          class="stripe-card"
+              <div class="col-12" v-if="this.lines.length * this.Museum.Building.Fees > 0">
+                <q-card class="my-card q-mt-md col-12">
+                  <q-card-section>
+                     <div>
+                    <b style="color:#6B1510" class="text-h6">Select Payment Method</b>
+                    <div class="row q-mt-sm">
+                      <div class="col-12">
+                          <q-splitter
+                              v-model="splitterModel"
+                              style="height: auto"
+                            >
+
+      <template v-slot:before>
+        <q-tabs
+          v-model="method"
+          vertical
+          class="text-teal"
+        >
+          <q-tab name="Card" icon="credit_card" label="Credit/Debit Card" />
+          <q-tab name="Cash" icon="local_atm" label="Cash" />
+        </q-tabs>
+      </template>
+
+      <template v-slot:after>
+        <q-tab-panels
+          v-model="method"
+          animated
+          swipeable
+          vertical
+          transition-prev="jump-up"
+          transition-next="jump-up"
+        >
+          <q-tab-panel name="Card">
+            <template>
+                      <div class="my-card">
+                        Pay with Credit or Debit Card
+                        <card
+                          class="stripe-card q-mt-sm"
                           :class="{ complete }"
                           stripe="pk_test_vqR369WnqQuVam22cDEZaWXh00Fao7K3bT"
                           @change="complete = $event.complete"
                         />
-                        </div>
-                        <q-btn
-                          @click="placeOrderButtonPressed"
-                          :disabled="!complete"
-                          color="green"
-                          label="PAY"
-                        />
-                    </template>
-                  </div>
+                      </div>
+                     </template>
+          </q-tab-panel>
+
+          <q-tab-panel name="Cash">
+            <span>Please settle a payment through our cashier</span>
+          </q-tab-panel>
+        </q-tab-panels>
+      </template>
+    </q-splitter>
+                      </div>
+
+                    </div>
+
                 </div>
+
+                  </q-card-section>
+                </q-card>
+                </div>
+
               </div>
-            </q-step>
 
-            <q-step :name="6" title="Finish" icon="add_comment" style="min-height: 100px"></q-step>
-
-            <template v-slot:navigation>
               <q-stepper-navigation>
-                <q-btn
-                  v-close-popup="step === 6"
-                  @click="$refs.stepper.next(), addReservation()"
-                  color="deep-orange"
-                  :label="step === 5 ? 'Reserve' : 'Continue'"
-                  v-if="modalbtn == 'add'"
-                />
-                <q-btn
-                  v-close-popup="step === 6"
-                  @click="$refs.stepper.next(), editRow()"
-                  color="deep-orange"
-                  :label="step === 5 ? 'Reserve' : 'Continue'"
-                  v-if="modalbtn == 'edit'"
-                />
-                <!-- <q-btn v-if="step === 4" v-close-popup flat color="red" label="Reservation" @click="addReservation()" /> -->
-                <q-btn
-                  v-if="step > 1"
-                  flat
-                  color="deep-orange"
-                  @click="$refs.stepper.previous()"
-                  label="Back"
-                  class="q-ml-sm"
-                />
+                          <q-btn
+                          v-if="method== 'Card'"
+                        @click="placeOrderButtonPressed"
+                        :disabled="!complete"
+                        color="green"
+                        label="Pay Now"
+                        v-close-popup
+                      />
+                      <q-btn
+                          v-if="method== 'Cash'"
+                        @click="addReservationCash"
+                        color="primary"
+                        label="Reserve"
+                        v-close-popup
+                      />
+                      <q-btn
+                          v-if="this.lines.length * this.Museum.Building.Fees == 0"
+                        @click="addReservationCash"
+                        color="primary"
+                        label="Reserve"
+                        v-close-popup
+                      />
+                <q-btn flat @click="step = 4" color="primary" label="Back" class="q-ml-sm" />
                 <q-btn v-close-popup flat color="red" label="Cancel" />
               </q-stepper-navigation>
-            </template>
+            </q-step>
           </q-stepper>
         </template>
       </q-dialog>
@@ -318,14 +396,10 @@
         </q-card>
       </q-dialog>
 
+      <!-- table -->
       <template>
         <div class="col-xs-12 col-sm-12 col-md-12">
-          <q-table
-            title="Reservation Details"
-            :data="reservations || VisitorL"
-            :columns="columns"
-            row-key="id"
-          >
+          <q-table title="Reservation Details" :data="reservations" :columns="columns" row-key="id">
             <template v-slot:top-right>
               <q-btn
                 color="green"
@@ -379,10 +453,10 @@ export default {
   components: { Card },
   data () {
     return {
-      card: false,
+      tab: '',
       amount: null,
       complete: false,
-      method: ['Card', 'Cash'],
+      method: '',
       title: null,
       date: '',
       Museum: {
@@ -441,11 +515,6 @@ export default {
         { name: 'pax', label: 'Numbers of Visitors', field: 'pax' },
         { name: 'actions', label: 'Actions', field: '', align: 'center' }
       ]
-      // ConUser: {
-      //   Name: null,
-      //   ConNum: null,
-      //   Email: null
-      // }
     }
   },
   watch: {
@@ -463,10 +532,12 @@ export default {
       reservations: firestore.collection('Reservation'),
       Building: firestore.collection('MuseumBuilding'),
       OperationHours: firestore.collection('OperationHours'),
-      Payment: firestore.collection('Payment')
+      Payment: firestore.collection('Payment'),
+      Billing: firestore.collection('Billing')
     }
   },
   methods: {
+    // stripe Billing
     placeOrderButtonPressed () {
       createToken().then(result => {
         if (result.error) {
@@ -476,7 +547,6 @@ export default {
             amount: this.lines.length * this.Museum.Building.Fees,
             source: result.token
           }
-
           this.saveDataToFireStore(stripeObject)
         }
       })
@@ -484,10 +554,20 @@ export default {
 
     saveDataToFireStore (stripeObject) {
       const db = firebase.firestore()
-      const chargesRef = db.collection('payment')
+      const chargesRef = db.collection('Payment')
       const pushId = chargesRef.doc().id
+      var Reserve = {
+        title: this.title,
+        date: this.date,
+        time: this.Museum.Times.Hour,
+        color: this.Museum.Building.Color,
+        start: this.date + 'T' + this.Museum.Times.Hour,
+        NumberofVisitor: this.lines.length,
+        Building: this.Museum.Building,
+        Contact: this.ConUser
+      }
 
-      db.collection('payment')
+      db.collection('Payment')
         .doc(pushId)
         .set(stripeObject)
 
@@ -495,15 +575,58 @@ export default {
         const charge = snapShot.data()
 
         if (charge.error) {
-          alert(charge.error)
+          this.$q.notify({
+            message: 'Data Failed' + charge.error,
+            color: 'red',
+            textColor: 'white',
+            icon: 'clear'
+          })
           chargesRef.doc(pushId).delete()
           return
         }
-
         // eslint-disable-next-line eqeqeq
         if (charge.status && charge.status == 'succeeded') {
-          alert(charge.status)
+          this.$q.notify({
+            color: 'green-4',
+            message: `Payment Successfully`,
+            icon: 'credit_card',
+            timeout: 500
+          })
         }
+
+        this.$firestore.reservations
+          .doc(pushId)
+          .set(Reserve)
+          .then(docRef => {
+            this.$firestore.VisitorL.doc(pushId).set({
+              Building: this.Museum.Building,
+              ListVisitors: this.lines,
+              date: this.date + 'T' + this.Museum.Times.Hour,
+              visitorType: 'reservation'
+            })
+            this.$firestore.Billing.doc(pushId).set({
+              Contact: this.ConUser,
+              Building: this.Museum.Building,
+              Amount: this.lines.length * this.Museum.Building.Fees,
+              PaymentMethod: 'Credit/Debit Card',
+              DatePayment: Date.now(),
+              Status: 'Paid'
+            })
+              .this.$q.notify({
+                color: 'green-4',
+                message: `Reservation Successfully Done`,
+                icon: 'cloud_done',
+                timeout: 500
+              })
+          })
+          .catch(function (error) {
+            this.$q.notify({
+              message: 'Data Failed' + error,
+              color: 'red',
+              textColor: 'white',
+              icon: 'clear'
+            })
+          })
       })
     },
     addLine () {
@@ -518,51 +641,103 @@ export default {
         this.lines.splice(lineId, 1)
       }
     },
-    addReservation () {
-      this.modalbtn = 'add'
-      if (this.step === 6) {
-        try {
-          // this.$firestore.contactPerson.add(this.ConUser)
-          var Reserve = {
-            title: this.title,
-            date: this.date,
-            time: this.Museum.Times.Hour,
-            color: this.Museum.Building.Color,
-            start: this.date + 'T' + this.Museum.Times.Hour,
-            NumberofVisitor: this.lines.length,
-            Building: this.Museum.Building,
-            Contact: this.ConUser
-          }
-          this.$firestore.reservations
-            .add(Reserve)
-            .then(docRef => {
-              this.$firestore.VisitorL.doc(docRef.id).set({
-                Building: this.Museum.Building,
-                ListVisitors: this.lines,
-                date: this.date + 'T' + this.Museum.Times.Hour,
-                visitorType: 'reservation'
-                // reservationsid: docRef.id
-              })
-            })
-            .catch(function (error) {
-              console.error('Error adding document: ', error)
-            })
-          this.$q.notify({
-            message: 'Successfully Added',
-            color: 'green-4',
-            textColor: 'white',
-            icon: 'cloud_done'
-          })
-        } catch (error) {
-          this.$q.notify({
-            message: 'Data Failed' + error,
-            color: 'red',
-            textColor: 'white',
-            icon: 'clear'
-          })
+    addReservationCash () {
+      try {
+        var Reserve = {
+          title: this.title,
+          date: this.date,
+          time: this.Museum.Times.Hour,
+          color: this.Museum.Building.Color,
+          start: this.date + 'T' + this.Museum.Times.Hour,
+          NumberofVisitor: this.lines.length,
+          Building: this.Museum.Building,
+          Contact: this.ConUser
         }
+        this.$firestore.reservations
+          .add(Reserve)
+          .then(docRef => {
+            this.$firestore.VisitorL.doc(docRef.id).set({
+              Building: this.Museum.Building,
+              ListVisitors: this.lines,
+              date: this.date + 'T' + this.Museum.Times.Hour,
+              visitorType: 'reservation'
+            })
+            this.$firestore.Billing.doc(docRef.id).set({
+              Contact: this.ConUser,
+              Building: this.Museum.Building,
+              Amount: this.lines.length * this.Museum.Building.Fees,
+              PaymentMethod: 'Cash',
+              DatePayment: '',
+              Status: 'Unpaid'
+            })
+          })
+          .catch(function (error) {
+            console.error('Error adding document: ', error)
+          })
+        this.$q.notify({
+          message: 'Successfully Added',
+          color: 'green-4',
+          textColor: 'white',
+          icon: 'cloud_done'
+        })
+      } catch (error) {
+        this.$q.notify({
+          message: 'Data Failed' + error,
+          color: 'red',
+          textColor: 'white',
+          icon: 'clear'
+        })
       }
     },
+    addReservationNoPayment () {
+      try {
+        var Reserve = {
+          title: this.title,
+          date: this.date,
+          time: this.Museum.Times.Hour,
+          color: this.Museum.Building.Color,
+          start: this.date + 'T' + this.Museum.Times.Hour,
+          NumberofVisitor: this.lines.length,
+          Building: this.Museum.Building,
+          Contact: this.ConUser
+        }
+        this.$firestore.reservations
+          .add(Reserve)
+          .then(docRef => {
+            this.$firestore.VisitorL.doc(docRef.id).set({
+              Building: this.Museum.Building,
+              ListVisitors: this.lines,
+              date: this.date + 'T' + this.Museum.Times.Hour,
+              visitorType: 'reservation'
+            })
+            this.$firestore.Billing.doc(docRef.id).set({
+              Contact: this.ConUser,
+              Building: this.Museum.Building,
+              Amount: this.lines.length * this.Museum.Building.Fees,
+              PaymentMethod: '',
+              DatePayment: Date.now(),
+              Status: 'Paid'
+            })
+          })
+          .catch(function (error) {
+            console.error('Error adding document: ', error)
+          })
+        this.$q.notify({
+          message: 'Successfully Added',
+          color: 'green-4',
+          textColor: 'white',
+          icon: 'cloud_done'
+        })
+      } catch (error) {
+        this.$q.notify({
+          message: 'Data Failed' + error,
+          color: 'red',
+          textColor: 'white',
+          icon: 'clear'
+        })
+      }
+    },
+
     dateRuleOptions (Reserve) {
       var today = new Date()
       // eslint-disable-next-line no-unused-vars
@@ -664,7 +839,6 @@ export default {
   },
   mounted () {
     this.addLine()
-    // eslint-disable-next-line no-undef
   }
 }
 </script>

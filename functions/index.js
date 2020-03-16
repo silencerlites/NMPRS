@@ -10,7 +10,7 @@ const cors = require("cors")({ origin: true });
 // });
 
 exports.createStripeCharge = functions.firestore
-  .document("payment/{pushId}")
+  .document("Payment/{pushId}")
   .onCreate(async (snap, context) => {
     try {
       const charge = {

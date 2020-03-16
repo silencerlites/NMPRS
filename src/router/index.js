@@ -11,6 +11,14 @@ Vue.filter('timeformat', (arg) => {
   return moment(arg).format('LLLL')
 })
 
+Vue.filter('timeformatDate', (arg) => {
+  return moment(arg).format('LL')
+})
+
+Vue.filter('timeformatTime', (arg) => {
+  return moment(arg).format('LT')
+})
+
 /*
  * If not building with SSR mode, you can
  * directly export the Router instantiation;
