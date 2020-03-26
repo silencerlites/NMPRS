@@ -217,150 +217,153 @@
               <div class="row">
                 <div class="col-12">
                   <q-card>
-                  <q-card-section vertical>
-                    <br>
-                    <div style="text-align:right">
-                      <img src="statics/app-logo-80x.svg" style="width:50px;" class="q-mr-lg">
-                      <span style="font-size:30px; color:#6B1510;">National Museum of the Philippines</span>
-                    </div>
-                    <q-separator style="background:#6B1510" class="q-mb-xs q-mt-xs"/>
-                    <br>
-                    <div class="row">
-                      <div class="col-8">
-                        Name: <br>
-                        <b class="text-h5 ">{{ this.ConUser.Name}}</b>
+                    <q-card-section vertical>
+                      <br />
+                      <div style="text-align:right">
+                        <img src="statics/app-logo-80x.svg" style="width:50px;" class="q-mr-lg" />
+                        <span
+                          style="font-size:30px; color:#6B1510;"
+                        >National Museum of the Philippines</span>
                       </div>
-                      <div class="col-4" style="float-right">
-                        <q-icon name="phone_android" size="1.3rem"/> {{  this.ConUser.ConNum}} <br>
-                        <q-icon name="mail" size="1.3rem"/> {{ this.ConUser.Email}}
+                      <q-separator style="background:#6B1510" class="q-mb-xs q-mt-xs" />
+                      <br />
+                      <div class="row">
+                        <div class="col-8">
+                          Name:
+                          <br />
+                          <b class="text-h5">{{ this.ConUser.Name}}</b>
+                        </div>
+                        <div class="col-4" style="float-right">
+                          <q-icon name="phone_android" size="1.3rem" />
+                          {{ this.ConUser.ConNum}}
+                          <br />
+                          <q-icon name="mail" size="1.3rem" />
+                          {{ this.ConUser.Email}}
+                        </div>
                       </div>
-                    </div>
-                    <q-separator  class="q-mb-sm q-mt-sm"/>
-                    <b style="color:#6B1510">Reservation Details</b>
-                    <q-separator  class="q-mb-sm q-mt-sm"/>
-                    <div class="row q-mt-sm">
-                      <div class="col-8">
-                        Building: <br>
-                        <b class="text-h7 ">{{ this.Museum.Building.NameBuilding }}</b>
+                      <q-separator class="q-mb-sm q-mt-sm" />
+                      <b style="color:#6B1510">Reservation Details</b>
+                      <q-separator class="q-mb-sm q-mt-sm" />
+                      <div class="row q-mt-sm">
+                        <div class="col-8">
+                          Building:
+                          <br />
+                          <b class="text-h7">{{ this.Museum.Building.NameBuilding }}</b>
+                        </div>
+                        <div class="col-4">
+                          Date: {{ this.date | timeformatDate }}
+                          <br />
+                          Time: {{ this.date + 'T' + this.Museum.Times.Hour | timeformatTime }}
+                        </div>
                       </div>
-                      <div class="col-4">
-                        Date: {{ this.date | timeformatDate }} <br>
-                        Time: {{ this.date + 'T' + this.Museum.Times.Hour | timeformatTime }}
+                      <div class="row q-mt-xs">
+                        <div class="col-8">
+                          Name of School | Institution | Group:
+                          <br />
+                          <b class="text-h7">{{ this.title }}</b>
+                        </div>
+                        <div class="col-4">
+                          Number of Visitors:
+                          <br />
+                          <b class="text-h7">{{ this.lines.length }}</b>
+                        </div>
                       </div>
-                    </div>
-                    <div class="row q-mt-xs">
-                      <div class="col-8">
-                        Name of School | Institution | Group: <br>
-                        <b class="text-h7 ">{{ this.title }}</b>
+                      <q-separator class="q-mb-sm q-mt-sm" />
+                      <b style="color:#6B1510">Billing Details</b>
+                      <q-separator class="q-mb-sm q-mt-sm" />
+                      <div class="row q-mt-xs">
+                        <div class="col-8">
+                          Building Fee:
+                          <br />
+                          <b class="text-h7">&#x20B1; {{ this.Museum.Building.Fees }}</b>
+                        </div>
+                        <div class="col-4">
+                          Total Amount :
+                          <br />
+                          <b
+                            class="text-h6"
+                            style="color:#d35400"
+                          >&#x20B1; {{ this.lines.length * this.Museum.Building.Fees }}</b>
+                        </div>
                       </div>
-                      <div class="col-4" >
-                        Number of Visitors: <br>
-                        <b class="text-h7 ">{{ this.lines.length }} </b>
-                      </div>
-                    </div>
-                    <q-separator  class="q-mb-sm q-mt-sm"/>
-                    <b style="color:#6B1510">Billing Details</b>
-                    <q-separator  class="q-mb-sm q-mt-sm"/>
-                    <div class="row q-mt-xs">
-                      <div class="col-8">
-                        Building Fee: <br>
-                        <b class="text-h7 "> &#x20B1; {{ this.Museum.Building.Fees }}</b>
-                      </div>
-                      <div class="col-4" >
-                        Total Amount : <br>
-                        <b class="text-h6" style="color:#d35400"> &#x20B1; {{ this.lines.length * this.Museum.Building.Fees }} </b>
-                      </div>
-                    </div>
-                  </q-card-section>
-                </q-card>
+                    </q-card-section>
+                  </q-card>
                 </div>
-              <div class="col-12" v-if="this.lines.length * this.Museum.Building.Fees > 0">
-                <q-card class="my-card q-mt-md col-12">
-                  <q-card-section>
-                     <div>
-                    <b style="color:#6B1510" class="text-h6">Select Payment Method</b>
-                    <div class="row q-mt-sm">
-                      <div class="col-12">
-                          <q-splitter
-                              v-model="splitterModel"
-                              style="height: auto"
-                            >
+                <div class="col-12" v-if="this.lines.length * this.Museum.Building.Fees > 0">
+                  <q-card class="my-card q-mt-md col-12">
+                    <q-card-section>
+                      <div>
+                        <b style="color:#6B1510" class="text-h6">Select Payment Method</b>
+                        <div class="row q-mt-sm">
+                          <div class="col-12">
+                            <q-splitter v-model="splitterModel" style="height: auto">
+                              <template v-slot:before>
+                                <q-tabs v-model="method" vertical class="text-teal">
+                                  <q-tab name="Card" icon="credit_card" label="Credit/Debit Card" />
+                                  <q-tab name="Cash" icon="local_atm" label="Cash" />
+                                </q-tabs>
+                              </template>
 
-      <template v-slot:before>
-        <q-tabs
-          v-model="method"
-          vertical
-          class="text-teal"
-        >
-          <q-tab name="Card" icon="credit_card" label="Credit/Debit Card" />
-          <q-tab name="Cash" icon="local_atm" label="Cash" />
-        </q-tabs>
-      </template>
+                              <template v-slot:after>
+                                <q-tab-panels
+                                  v-model="method"
+                                  animated
+                                  swipeable
+                                  vertical
+                                  transition-prev="jump-up"
+                                  transition-next="jump-up"
+                                >
+                                  <q-tab-panel name="Card">
+                                    <template>
+                                      <div class="my-card">
+                                        Pay with Credit or Debit Card
+                                        <card
+                                          class="stripe-card q-mt-sm"
+                                          :class="{ complete }"
+                                          stripe="pk_test_vqR369WnqQuVam22cDEZaWXh00Fao7K3bT"
+                                          @change="complete = $event.complete"
+                                        />
+                                      </div>
+                                    </template>
+                                  </q-tab-panel>
 
-      <template v-slot:after>
-        <q-tab-panels
-          v-model="method"
-          animated
-          swipeable
-          vertical
-          transition-prev="jump-up"
-          transition-next="jump-up"
-        >
-          <q-tab-panel name="Card">
-            <template>
-                      <div class="my-card">
-                        Pay with Credit or Debit Card
-                        <card
-                          class="stripe-card q-mt-sm"
-                          :class="{ complete }"
-                          stripe="pk_test_vqR369WnqQuVam22cDEZaWXh00Fao7K3bT"
-                          @change="complete = $event.complete"
-                        />
+                                  <q-tab-panel name="Cash">
+                                    <span>Please settle a payment through our cashier</span>
+                                  </q-tab-panel>
+                                </q-tab-panels>
+                              </template>
+                            </q-splitter>
+                          </div>
+                        </div>
                       </div>
-                     </template>
-          </q-tab-panel>
-
-          <q-tab-panel name="Cash">
-            <span>Please settle a payment through our cashier</span>
-          </q-tab-panel>
-        </q-tab-panels>
-      </template>
-    </q-splitter>
-                      </div>
-
-                    </div>
-
+                    </q-card-section>
+                  </q-card>
                 </div>
-
-                  </q-card-section>
-                </q-card>
-                </div>
-
               </div>
 
               <q-stepper-navigation>
-                          <q-btn
-                          v-if="method== 'Card'"
-                        @click="placeOrderButtonPressed"
-                        :disabled="!complete"
-                        color="green"
-                        label="Pay Now"
-                        v-close-popup
-                      />
-                      <q-btn
-                          v-if="method== 'Cash'"
-                        @click="addReservationCash"
-                        color="primary"
-                        label="Reserve"
-                        v-close-popup
-                      />
-                      <q-btn
-                          v-if="this.lines.length * this.Museum.Building.Fees == 0"
-                        @click="addReservationCash"
-                        color="primary"
-                        label="Reserve"
-                        v-close-popup
-                      />
+                <q-btn
+                  v-if="method== 'Card'"
+                  @click="placeOrderButtonPressed"
+                  :disabled="!complete"
+                  color="green"
+                  label="Pay Now"
+                  v-close-popup
+                />
+                <q-btn
+                  v-if="method== 'Cash'"
+                  @click="addReservationCash"
+                  color="primary"
+                  label="Reserve"
+                  v-close-popup
+                />
+                <q-btn
+                  v-if="this.lines.length * this.Museum.Building.Fees == 0"
+                  @click="addReservationNoPayment"
+                  color="primary"
+                  label="Reserve"
+                  v-close-popup
+                />
                 <q-btn flat @click="step = 4" color="primary" label="Back" class="q-ml-sm" />
                 <q-btn v-close-popup flat color="red" label="Cancel" />
               </q-stepper-navigation>
@@ -419,9 +422,28 @@
                 </q-td>
                 <q-td :props="props" key="school">{{ props.row.title }}</q-td>
                 <q-td :props="props" key="pax">
-                  {{
-                  props.row.NumberofVisitor
-                  }}
+                  <q-btn
+                    dense
+                    flat
+                    color="grey"
+                    label="View the List"
+                    align="right"
+                    @click="viewListVisitor(props.row)"
+                  ></q-btn>|
+                  <q-badge color="blue">
+                    {{
+                    props.row.NumberofVisitor
+                    }}
+                  </q-badge>
+                </q-td>
+                <q-td :props="props" key="bill">
+                  <q-btn
+                    dense
+                    flat
+                    color="orange"
+                    label="View the Billing"
+                    @click="viewListBilling(props.row)"
+                  ></q-btn>
                 </q-td>
                 <q-td auto-width key="action">
                   <q-btn
@@ -440,6 +462,136 @@
         </div>
       </template>
     </div>
+    <q-dialog v-model="viewList">
+      <q-card flat bordered class="my-card bg-grey-1">
+        <q-card-section>
+          <div class="row items-center no-wrap">
+            <div class="col">
+              <div class="text-subtitle2">Visitors List</div>
+            </div>
+          </div>
+        </q-card-section>
+
+        <q-card-section>
+          <div
+            v-for="(line, index) in lines"
+            :key="index"
+            class="row q-pb-md"
+          >{{++index + '.' + ' ' + line.FirstN + ' ' + line.LastN}}</div>
+        </q-card-section>
+
+        <q-separator />
+
+        <q-card-actions>
+          <q-btn flat v-close-popup>OK</q-btn>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
+    <q-dialog v-model="viewBill">
+      <q-card flat bordered class="my-card bg-grey-1" style="max-width: 2000px">
+        <q-card-section>
+          <div style="text-align:right">
+            <img src="statics/app-logo-80x.svg" style="width:50px;" class="q-mr-lg" />
+            <span style="font-size:30px; color:#6B1510;">National Museum of the Philippines</span>
+          </div>
+          <q-separator style="background:#6B1510" class="q-mb-xs q-mt-xs" />
+          <div class="col-8" style="text-align:right">
+            Billing No:
+            <b>{{ this.idVisit }}</b>
+          </div>
+          <q-separator class="q-mb-sm q-mt-sm" />
+          <div class="row">
+            <div class="col-8">
+              Name:
+              <br />
+              <b class="text-h5">{{ this.ConUser.Name}}</b>
+            </div>
+            <div class="col-4" style="float-right">
+              <q-icon name="phone_android" size="1.3rem" />
+              {{ this.ConUser.ConNum}}
+              <br />
+              <q-icon name="mail" size="1.3rem" />
+              {{ this.ConUser.Email}}
+            </div>
+          </div>
+          <q-separator class="q-mb-sm q-mt-sm" />
+          <b style="color:#6B1510">Reservation Details</b>
+          <q-separator class="q-mb-sm q-mt-sm" />
+          <div class="row q-mt-sm">
+            <div class="col-8">
+              Building:
+              <br />
+              <b class="text-h7">{{ this.Museum.Building.NameBuilding }}</b>
+            </div>
+            <div class="col-4">Date & Time: {{ this.reservedate | timeformat }}</div>
+          </div>
+          <div class="row q-mt-xs">
+            <div class="col-8">
+              Name of School | Institution | Group:
+              <br />
+              <b class="text-h7">{{ this.title }}</b>
+            </div>
+            <div class="col-4">
+              Number of Visitors:
+              <br />
+              <b class="text-h7">{{ this.lines.length }}</b>
+            </div>
+          </div>
+          <q-separator class="q-mb-sm q-mt-sm" />
+          <b style="color:#6B1510">Billing Details</b>
+          <q-separator class="q-mb-sm q-mt-sm" />
+          <div class="row q-mt-xs">
+            <div class="col-8">
+              Building Fee:
+              <br />
+              &#x20B1; {{ this.Museum.Building.Fees }}
+            </div>
+            <div class="col-4">
+              Total Amount :
+              <br />
+              <b style="color:#d35400">&#x20B1; {{ this.lines.length * this.Museum.Building.Fees }}</b>
+            </div>
+          </div>
+          <q-separator class="q-mb-sm q-mt-sm" />
+          <b style="color:#6B1510">Payment Details</b>
+          <q-separator class="q-mb-sm q-mt-sm" />
+          <div class="row q-mt-xs">
+            <div class="col-8">
+              Payment Method:
+              <br />
+              {{this.paymentMethod}}
+            </div>
+            <div class="col-4">
+              Status of Payment:
+              <br />
+              <div v-if="this.statusPayment== 'Paid'">
+                <q-badge color="green">{{this.statusPayment}}</q-badge>
+              </div>
+              <div v-if="this.statusPayment== 'Unpaid'">
+                <q-badge color="red">{{this.statusPayment}}</q-badge>
+              </div>
+            </div>
+          </div>
+          <div v-if="this.paymentMethod == 'Credit/Debit Card'">
+            <q-separator class="q-mb-sm q-mt-sm" />
+            <b style="color:#6B1510">Receipt</b>
+            <q-separator class="q-mb-sm q-mt-sm" />
+            <div class="row q-mt-xs">
+              <div class="col-8">
+                <a :href='receipt' label="To Docs index" outline color="purple" target="_blank" class="link">View the Receipt</a>
+              </div>
+            </div>
+          </div>
+        </q-card-section>
+
+        <q-separator />
+
+        <q-card-actions>
+          <q-btn flat v-close-popup>OK</q-btn>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -453,7 +605,14 @@ export default {
   components: { Card },
   data () {
     return {
-      tab: '',
+      paymentMethod: null,
+      statusPayment: null,
+      reservedate: '',
+      idVisit: '',
+      viewVisitorFire: [],
+      viewList: false,
+      viewBill: false,
+      receipt: null,
       amount: null,
       complete: false,
       method: '',
@@ -484,6 +643,7 @@ export default {
       modalbtn: null,
       activeItem: null,
       step: 1,
+      viewvi: [],
       columns: [
         {
           name: 'date',
@@ -512,16 +672,24 @@ export default {
           sortable: true,
           style: 'max-width: 10px'
         },
-        { name: 'pax', label: 'Numbers of Visitors', field: 'pax' },
+        {
+          name: 'pax',
+          label: 'Numbers of Visitors',
+          field: 'pax',
+          align: 'left'
+        },
+        { name: 'bill', label: 'Billing', field: 'bill', align: 'center' },
         { name: 'actions', label: 'Actions', field: '', align: 'center' }
       ]
     }
   },
+
   watch: {
     lines () {
       this.blockRemoval = this.lines.length <= 1
     }
   },
+
   firestore () {
     return {
       VisitorL: firestore.collection('VisitorsLog'),
@@ -536,6 +704,7 @@ export default {
       Billing: firestore.collection('Billing')
     }
   },
+
   methods: {
     // stripe Billing
     placeOrderButtonPressed () {
@@ -604,14 +773,18 @@ export default {
               date: this.date + 'T' + this.Museum.Times.Hour,
               visitorType: 'reservation'
             })
-            this.$firestore.Billing.doc(pushId).set({
-              Contact: this.ConUser,
-              Building: this.Museum.Building,
-              Amount: this.lines.length * this.Museum.Building.Fees,
-              PaymentMethod: 'Credit/Debit Card',
-              DatePayment: Date.now(),
-              Status: 'Paid'
-            })
+            this.$firestore.Billing.doc(pushId)
+              .set({
+                Contact: this.ConUser,
+                Building: this.Museum.Building,
+                Amount: this.lines.length * this.Museum.Building.Fees,
+                PaymentMethod: 'Credit/Debit Card',
+                DatePayment: Date.now(),
+                NumberofVisitor: this.lines.length,
+                DateofReserve: this.date + 'T' + this.Museum.Times.Hour,
+                NameofGroup: this.title,
+                Status: 'Paid'
+              })
               .this.$q.notify({
                 color: 'green-4',
                 message: `Reservation Successfully Done`,
@@ -629,6 +802,51 @@ export default {
           })
       })
     },
+
+    viewListVisitor (arg) {
+      this.viewList = true
+      this.idVisit = arg.id
+      var docRef = this.$firestore.VisitorL.doc(arg.id)
+
+      docRef
+        .get()
+        .then(doc => {
+          console.log('Cached document data:', doc.data())
+          this.lines = doc.data().ListVisitors
+        })
+        .catch(function (error) {
+          console.log('Error getting document:', error)
+        })
+
+      console.log()
+    },
+    viewListBilling (arg) {
+      this.viewBill = true
+      this.idVisit = arg.id
+      var docRef = this.$firestore.Billing.doc(arg.id)
+      var docRefs = this.$firestore.Payment.doc(arg.id)
+
+      docRef.get().then(doc => {
+        console.log('Cached document data:', doc.data())
+        this.ConUser = doc.data().Contact
+        this.Museum.Building = doc.data().Building
+        this.NumberofVisitor = doc.data().NumberofVisitor
+        this.reservedate = doc.data().DateofReserve
+        this.title = doc.data().NameofGroup
+        this.amount = doc.data().Amount
+        this.paymentMethod = doc.data().PaymentMethod
+        this.statusPayment = doc.data().Status
+      })
+      docRefs
+        .get()
+        .then(doc => {
+          console.log('Cached document data:', doc.data())
+          this.receipt = doc.data().receipt_url
+        })
+        .catch(function (error) {
+          console.log('Error getting document:', error)
+        })
+    },
     addLine () {
       // let checkEmptyLines = this.lines.filter(line => line.FirstN === null)
       // if (checkEmptyLines.length >= 1 && this.lines.length > 0) {
@@ -636,11 +854,13 @@ export default {
       // }
       this.lines.push({})
     },
+
     removeLine (lineId) {
       if (!this.blockRemoval) {
         this.lines.splice(lineId, 1)
       }
     },
+
     addReservationCash () {
       try {
         var Reserve = {
@@ -668,6 +888,9 @@ export default {
               Amount: this.lines.length * this.Museum.Building.Fees,
               PaymentMethod: 'Cash',
               DatePayment: '',
+              NumberofVisitor: this.lines.length,
+              DateofReserve: this.date + 'T' + this.Museum.Times.Hour,
+              NameofGroup: this.title,
               Status: 'Unpaid'
             })
           })
@@ -689,6 +912,7 @@ export default {
         })
       }
     },
+
     addReservationNoPayment () {
       try {
         var Reserve = {
@@ -715,7 +939,10 @@ export default {
               Building: this.Museum.Building,
               Amount: this.lines.length * this.Museum.Building.Fees,
               PaymentMethod: '',
+              NumberofVisitor: this.lines.length,
+              DateofReserve: this.date + 'T' + this.Museum.Times.Hour,
               DatePayment: Date.now(),
+              NameofGroup: this.title,
               Status: 'Paid'
             })
           })
@@ -748,6 +975,7 @@ export default {
       today = yyyy + '/' + mm + '/' + dd
       return Reserve > today && Reserve <= '3000/03/15'
     },
+
     editModal (Reserve) {
       this.addReg = true
       this.Reserve = Reserve
@@ -854,5 +1082,19 @@ export default {
   box-shadow: 0 1px 3px 0 #e6ebf1;
   -webkit-transition: box-shadow 150ms ease;
   transition: box-shadow 150ms ease;
+}
+.link {
+  color: black;
+  padding: 0.5em 1em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.link:hover {
+  background-color: #555;
+}
+
+.link:active {
+  background-color: black;
 }
 </style>

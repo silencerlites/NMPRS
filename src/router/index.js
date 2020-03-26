@@ -40,16 +40,60 @@ export default function (/* { store, ssrContext } */) {
     base: process.env.VUE_ROUTER_BASE
   })
 
+  // Router.beforeEach((to, from, next) => {
+  //   const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
+  //   const currentUser = firebaseAuth.currentUser
+  //   if (requiresAuth && !currentUser) {
+  //     next('/')
+  //   } else if (requiresAuth && currentUser) {
+  //     next()
+  //   } else {
+  //     next()
+  //   }
+  // })
+
   Router.beforeEach((to, from, next) => {
-    const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
-    const currentUser = firebaseAuth.currentUser
-    if (requiresAuth && !currentUser) {
-      next('/')
-    } else if (requiresAuth && currentUser) {
-      next()
-    } else {
-      next()
-    }
+    firebaseAuth.onAuthStateChanged(userAuth => {
+      if (userAuth) {
+        firebaseAuth.currentUser.getIdTokenResult()
+          .then(function ({
+            claims
+          }) {
+            if (claims.customer) {
+              if (to.path !== '/customer') {
+                return next({
+                  path: '/customer'
+                })
+              }
+            } else if (claims.admin) {
+              if (to.path !== '/adminSide' && to.path !== '/adminSide/reservation' && to.path !== '/adminSide/reservation/list' && to.path !== '/adminSide/visitorslog' && to.path !== '/adminSide/survey' && to.path !== '/adminSide/billing' && to.path !== '/adminSide/accounts' && to.path !== '/adminSide/reports' && to.path !== '/adminSide/setting') {
+                next({
+                  path: '/adminSide'
+                })
+              }
+            }
+            // else if (claims.driver) {
+            //   if (to.path !== '/driver') {
+            //     return next({
+            //       path: '/driver'
+            //     })
+            //   }
+            // }
+          })
+      } else {
+        if (to.matched.some(record => record.meta.requiresAuth)) {
+          next({
+            path: '/',
+            query: {
+              redirect: to.fullPath
+            }
+          })
+        } else {
+          next()
+        }
+      }
+    })
+    next()
   })
 
   return Router

@@ -95,6 +95,7 @@
 </template>
 
 <script>
+// import firebase from 'firebase'
 import { firestore, firebaseAuth, firebaseDb } from 'boot/firebase'
 
 export default {
@@ -158,27 +159,31 @@ export default {
         },
         Email: null,
         Password: null,
-        UserRole: null,
-        Status: null,
-        DateCreated: Date.now()
+        UserRole: null
       }
     }
   },
   firestore () {
     return {
-      user: firestore.collection('users').doc(this.userAccount.Email)
+      user: firestore.collection('Users').doc(this.userAccount.Email)
     }
   },
   methods: {
-    addUserAccount () {
+    async addUserAccount (uid, event) {
       this.modalbtn = 'add'
+      // var addMessage = firebase.functions().httpsCallable('AddUserRole')
+      // var data = { role: { [event.target.value]: true } }
       try {
         firebaseAuth.createUserWithEmailAndPassword(this.Email, this.Password)
           .then(cred => {
             console.log(cred.user.uid)
-            firebaseDb.collection('users').doc().set({
-              Email: this.Email,
-              user_id: cred.user.uid
+            firebaseDb.collection('Users').doc(cred.user.uid).set({
+              DateCreated: Date.now(),
+              Name: {
+                FirstName: this.userAccount.Name.FirstName,
+                LastName: this.userAccount.Name.LastName
+              },
+              ContactNumber: null
             })
             this.$q.notify({
               message: 'Added',
