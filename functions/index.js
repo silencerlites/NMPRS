@@ -1,7 +1,12 @@
 /* eslint-disable consistent-return */
 const functions = require("firebase-functions");
 const stripe = require("stripe")("sk_test_KbmqnhSkvzk5Dxjkk4x7b2Ew00LjxBSfRs");
-const cors = require("cors")({ origin: true });
+const admin = require("firebase-admin");
+
+admin.initializeApp();
+
+const db = admin.firestore();
+
 
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
@@ -48,6 +53,7 @@ function userFacingMessage(error) {
     : "An error occurred, developers have been alerted";
 }
 
+<<<<<<< HEAD
 exports.AddUserRole = functions.auth.user().onCreate(async (authUser) => {
 
   if (authUser.email) {
@@ -94,4 +100,44 @@ exports.setUserRole = functions.https.onCall(async (data, context) => {
     console.log(error)
   }
 
+=======
+exports.AddUserRole = functions.auth.user().onCreate(async authUser => {
+  if (authUser.email) {
+    const customClaims = {
+      admin: true
+    };
+    try {
+      var _ = await admin
+        .auth()
+        .setCustomUserClaims(authUser.uid, customClaims);
+
+      return db
+        .collection("Users")
+        .doc(authUser.uid)
+        .update({
+          email: authUser.email,
+          role: customClaims
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+});
+
+exports.setUserRole = functions.https.onCall(async (data, context) => {
+  if (!context.auth.token.admin) return;
+
+  try {
+    var _ = await admin.auth().setCustomUserClaims(data.uid, data.role);
+
+    return db
+      .collection("roles")
+      .doc(data.uid)
+      .update({
+        role: data.role
+      });
+  } catch (error) {
+    console.log(error);
+  }
+>>>>>>> 8f4232e2c5205accd7d7a0aa754efc9cec5efc6b
 });

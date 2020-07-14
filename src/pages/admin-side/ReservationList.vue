@@ -290,6 +290,7 @@
                         <span
                           style="font-size:30px; color:#6B1510;"
                         >National Museum of the Philippines</span>
+<<<<<<< HEAD
                       </div>
                       <q-separator style="background:#6B1510" class="q-mb-xs q-mt-xs" />
                       <br />
@@ -362,6 +363,70 @@
                           </b>
                         </div>
                       </div>
+=======
+                      </div>
+                      <q-separator style="background:#6B1510" class="q-mb-xs q-mt-xs" />
+                      <br />
+                      <div class="row">
+                        <div class="col-8">
+                          Name:
+                          <br />
+                          <b class="text-h5">{{ this.ConUser.Name}}</b>
+                        </div>
+                        <div class="col-4" style="float-right">
+                          <q-icon name="phone_android" size="1.3rem" />
+                          {{ this.ConUser.ConNum}}
+                          <br />
+                          <q-icon name="mail" size="1.3rem" />
+                          {{ this.ConUser.Email}}
+                        </div>
+                      </div>
+                      <q-separator class="q-mb-sm q-mt-sm" />
+                      <b style="color:#6B1510">Reservation Details</b>
+                      <q-separator class="q-mb-sm q-mt-sm" />
+                      <div class="row q-mt-sm">
+                        <div class="col-8">
+                          Building:
+                          <br />
+                          <b class="text-h7">{{ this.Museum.Building.NameBuilding }}</b>
+                        </div>
+                        <div class="col-4">
+                          Date: {{ this.date | timeformatDate }}
+                          <br />
+                          Time: {{ this.date + 'T' + this.Museum.Times.Hour | timeformatTime }}
+                        </div>
+                      </div>
+                      <div class="row q-mt-xs">
+                        <div class="col-8">
+                          Name of School | Institution | Group:
+                          <br />
+                          <b class="text-h7">{{ this.title }}</b>
+                        </div>
+                        <div class="col-4">
+                          Number of Visitors:
+                          <br />
+                          <b class="text-h7">{{ this.lines.length }}</b>
+                        </div>
+                      </div>
+                      <q-separator class="q-mb-sm q-mt-sm" />
+                      <b style="color:#6B1510">Billing Details</b>
+                      <q-separator class="q-mb-sm q-mt-sm" />
+                      <div class="row q-mt-xs">
+                        <div class="col-8">
+                          Building Fee:
+                          <br />
+                          <b class="text-h7">&#x20B1; {{ this.Museum.Building.Fees }}</b>
+                        </div>
+                        <div class="col-4">
+                          Total Amount :
+                          <br />
+                          <b
+                            class="text-h6"
+                            style="color:#d35400"
+                          >&#x20B1; {{ this.lines.length * this.Museum.Building.Fees }}</b>
+                        </div>
+                      </div>
+>>>>>>> 8f4232e2c5205accd7d7a0aa754efc9cec5efc6b
                     </q-card-section>
                   </q-card>
                 </div>
@@ -404,10 +469,14 @@
                                   </q-tab-panel>
 
                                   <q-tab-panel name="Cash">
+<<<<<<< HEAD
                                     <span>
                                       Please settle a payment through our
                                       cashier
                                     </span>
+=======
+                                    <span>Please settle a payment through our cashier</span>
+>>>>>>> 8f4232e2c5205accd7d7a0aa754efc9cec5efc6b
                                   </q-tab-panel>
                                 </q-tab-panels>
                               </template>
@@ -417,6 +486,7 @@
                       </div>
                     </q-card-section>
                   </q-card>
+<<<<<<< HEAD
                 </div>
               </div>
 
@@ -564,10 +634,14 @@
               <div class="col-12">
                 Name of School | Institution | Group
                 <q-input outlined v-model="title" />
+=======
+                </div>
+>>>>>>> 8f4232e2c5205accd7d7a0aa754efc9cec5efc6b
               </div>
 
               <q-stepper-navigation>
                 <q-btn
+<<<<<<< HEAD
                   @click="
                     () => {
                       step = 3;
@@ -609,6 +683,30 @@
               <q-stepper-navigation>
                 <q-btn @click="editRow" color="orange" label="Reschedule" v-close-popup />
                 <q-btn flat @click="step = 2" color="primary" label="Back" class="q-ml-sm" />
+=======
+                  v-if="method== 'Card'"
+                  @click="placeOrderButtonPressed"
+                  :disabled="!complete"
+                  color="green"
+                  label="Pay Now"
+                  v-close-popup
+                />
+                <q-btn
+                  v-if="method== 'Cash'"
+                  @click="addReservationCash"
+                  color="primary"
+                  label="Reserve"
+                  v-close-popup
+                />
+                <q-btn
+                  v-if="this.lines.length * this.Museum.Building.Fees == 0"
+                  @click="addReservationNoPayment"
+                  color="primary"
+                  label="Reserve"
+                  v-close-popup
+                />
+                <q-btn flat @click="step = 4" color="primary" label="Back" class="q-ml-sm" />
+>>>>>>> 8f4232e2c5205accd7d7a0aa754efc9cec5efc6b
                 <q-btn v-close-popup flat color="red" label="Cancel" />
               </q-stepper-navigation>
             </q-step>
@@ -732,7 +830,15 @@
                     align="right"
                     @click="viewListVisitor(props.row)"
                   ></q-btn>|
+<<<<<<< HEAD
                   <q-badge color="blue">{{ props.row.NumberofVisitor }}</q-badge>
+=======
+                  <q-badge color="blue">
+                    {{
+                    props.row.NumberofVisitor
+                    }}
+                  </q-badge>
+>>>>>>> 8f4232e2c5205accd7d7a0aa754efc9cec5efc6b
                 </q-td>
                 <q-td :props="props" key="bill">
                   <q-btn
@@ -742,6 +848,7 @@
                     label="View the Billing"
                     @click="viewListBilling(props.row)"
                   ></q-btn>
+<<<<<<< HEAD
                 </q-td>
                 <q-td :props="props" key="ticket">
                   <q-btn
@@ -765,6 +872,8 @@
                     color="green"
                     v-if="props.row.StatusArrival == 'Arrived'"
                   >{{ props.row.StatusArrival}}</q-badge>
+=======
+>>>>>>> 8f4232e2c5205accd7d7a0aa754efc9cec5efc6b
                 </q-td>
                 <q-td auto-width key="action">
                   <q-btn
@@ -811,6 +920,7 @@
       </template>
     </div>
     <q-dialog v-model="viewList">
+<<<<<<< HEAD
       <q-card flat bordered class="my-card bg-grey-1" style="width:1500px; max-width:1500px">
         <div id="vBill">
           <q-card-section>
@@ -855,10 +965,34 @@
         <q-card-actions>
           <q-btn flat v-close-popup>OK</q-btn>
           <q-btn flat @click="print">Print</q-btn>
+=======
+      <q-card flat bordered class="my-card bg-grey-1">
+        <q-card-section>
+          <div class="row items-center no-wrap">
+            <div class="col">
+              <div class="text-subtitle2">Visitors List</div>
+            </div>
+          </div>
+        </q-card-section>
+
+        <q-card-section>
+          <div
+            v-for="(line, index) in lines"
+            :key="index"
+            class="row q-pb-md"
+          >{{++index + '.' + ' ' + line.FirstN + ' ' + line.LastN}}</div>
+        </q-card-section>
+
+        <q-separator />
+
+        <q-card-actions>
+          <q-btn flat v-close-popup>OK</q-btn>
+>>>>>>> 8f4232e2c5205accd7d7a0aa754efc9cec5efc6b
         </q-card-actions>
       </q-card>
     </q-dialog>
 
+<<<<<<< HEAD
     <q-dialog
       :maximized="maximizedToggle"
       persistent
@@ -984,6 +1118,92 @@
               </div>
             </div>
             <q-separator class="q-mb-sm q-mt-sm" />
+=======
+    <q-dialog v-model="viewBill">
+      <q-card flat bordered class="my-card bg-grey-1" style="max-width: 2000px">
+        <q-card-section>
+          <div style="text-align:right">
+            <img src="statics/app-logo-80x.svg" style="width:50px;" class="q-mr-lg" />
+            <span style="font-size:30px; color:#6B1510;">National Museum of the Philippines</span>
+          </div>
+          <q-separator style="background:#6B1510" class="q-mb-xs q-mt-xs" />
+          <div class="col-8" style="text-align:right">
+            Billing No:
+            <b>{{ this.idVisit }}</b>
+          </div>
+          <q-separator class="q-mb-sm q-mt-sm" />
+          <div class="row">
+            <div class="col-8">
+              Name:
+              <br />
+              <b class="text-h5">{{ this.ConUser.Name}}</b>
+            </div>
+            <div class="col-4" style="float-right">
+              <q-icon name="phone_android" size="1.3rem" />
+              {{ this.ConUser.ConNum}}
+              <br />
+              <q-icon name="mail" size="1.3rem" />
+              {{ this.ConUser.Email}}
+            </div>
+          </div>
+          <q-separator class="q-mb-sm q-mt-sm" />
+          <b style="color:#6B1510">Reservation Details</b>
+          <q-separator class="q-mb-sm q-mt-sm" />
+          <div class="row q-mt-sm">
+            <div class="col-8">
+              Building:
+              <br />
+              <b class="text-h7">{{ this.Museum.Building.NameBuilding }}</b>
+            </div>
+            <div class="col-4">Date & Time: {{ this.reservedate | timeformat }}</div>
+          </div>
+          <div class="row q-mt-xs">
+            <div class="col-8">
+              Name of School | Institution | Group:
+              <br />
+              <b class="text-h7">{{ this.title }}</b>
+            </div>
+            <div class="col-4">
+              Number of Visitors:
+              <br />
+              <b class="text-h7">{{ this.lines.length }}</b>
+            </div>
+          </div>
+          <q-separator class="q-mb-sm q-mt-sm" />
+          <b style="color:#6B1510">Billing Details</b>
+          <q-separator class="q-mb-sm q-mt-sm" />
+          <div class="row q-mt-xs">
+            <div class="col-8">
+              Building Fee:
+              <br />
+              &#x20B1; {{ this.Museum.Building.Fees }}
+            </div>
+            <div class="col-4">
+              Total Amount :
+              <br />
+              <b style="color:#d35400">&#x20B1; {{ this.lines.length * this.Museum.Building.Fees }}</b>
+            </div>
+          </div>
+          <q-separator class="q-mb-sm q-mt-sm" />
+          <b style="color:#6B1510">Payment Details</b>
+          <q-separator class="q-mb-sm q-mt-sm" />
+          <div class="row q-mt-xs">
+            <div class="col-8">
+              Payment Method:
+              <br />
+              {{this.paymentMethod}}
+            </div>
+            <div class="col-4">
+              Status of Payment:
+              <br />
+              <div v-if="this.statusPayment== 'Paid'">
+                <q-badge color="green">{{this.statusPayment}}</q-badge>
+              </div>
+              <div v-if="this.statusPayment== 'Unpaid'">
+                <q-badge color="red">{{this.statusPayment}}</q-badge>
+              </div>
+            </div>
+>>>>>>> 8f4232e2c5205accd7d7a0aa754efc9cec5efc6b
           </div>
           <div v-if="this.paymentMethod == 'Credit/Debit Card'">
             <q-separator class="q-mb-sm q-mt-sm" />
@@ -991,6 +1211,7 @@
             <q-separator class="q-mb-sm q-mt-sm" />
             <div class="row q-mt-xs">
               <div class="col-8">
+<<<<<<< HEAD
                 <a
                   :href="receipt"
                   label="To Docs index"
@@ -999,6 +1220,9 @@
                   target="_blank"
                   class="link"
                 >View the Receipt</a>
+=======
+                <a :href='receipt' label="To Docs index" outline color="purple" target="_blank" class="link">View the Receipt</a>
+>>>>>>> 8f4232e2c5205accd7d7a0aa754efc9cec5efc6b
               </div>
             </div>
           </div>
@@ -1008,6 +1232,7 @@
 
         <q-card-actions>
           <q-btn flat v-close-popup>OK</q-btn>
+<<<<<<< HEAD
           <q-btn flat @click="print">Print</q-btn>
         </q-card-actions>
       </q-card>
@@ -1058,6 +1283,8 @@
             v-close-popup
             @click="print"
           />
+=======
+>>>>>>> 8f4232e2c5205accd7d7a0aa754efc9cec5efc6b
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -1078,6 +1305,7 @@ export default {
   components: { Card, QrcodeVue, QrcodeStream },
   data () {
     return {
+<<<<<<< HEAD
       printqr: false,
       destroyed: false,
       isValid: undefined,
@@ -1092,6 +1320,8 @@ export default {
         label: '',
         CategoryRef: 'Student'
       },
+=======
+>>>>>>> 8f4232e2c5205accd7d7a0aa754efc9cec5efc6b
       paymentMethod: null,
       statusPayment: null,
       reservedate: '',
@@ -1135,11 +1365,14 @@ export default {
       activeItem: null,
       step: 1,
       viewvi: [],
+<<<<<<< HEAD
       pagination: {
         sortBy: 'date',
         rowsPerPage: 12,
         descending: true // current rows per page being displayed
       },
+=======
+>>>>>>> 8f4232e2c5205accd7d7a0aa754efc9cec5efc6b
       columns: [
         {
           name: 'date',
@@ -1175,8 +1408,11 @@ export default {
           align: 'left'
         },
         { name: 'bill', label: 'Billing', field: 'bill', align: 'center' },
+<<<<<<< HEAD
         { name: 'ticket', label: 'QR Tickets', field: 'ticket', align: 'center' },
         { name: 'status', label: 'Status of Arrival', field: 'status', align: 'center' },
+=======
+>>>>>>> 8f4232e2c5205accd7d7a0aa754efc9cec5efc6b
         { name: 'actions', label: 'Actions', field: '', align: 'center' }
       ]
     }
@@ -1345,6 +1581,7 @@ export default {
           })
         }
 
+<<<<<<< HEAD
         this.$firestore.reservations.doc(pushId).set(Reserve)
 
         this.$firestore.Report.doc(pushId).set(Rep)
@@ -1365,6 +1602,36 @@ export default {
             DateofReserve: this.date + 'T' + this.Museum.Times.Hour,
             NameofGroup: this.title,
             Status: 'Paid'
+=======
+        this.$firestore.reservations
+          .doc(pushId)
+          .set(Reserve)
+          .then(docRef => {
+            this.$firestore.VisitorL.doc(pushId).set({
+              Building: this.Museum.Building,
+              ListVisitors: this.lines,
+              date: this.date + 'T' + this.Museum.Times.Hour,
+              visitorType: 'reservation'
+            })
+            this.$firestore.Billing.doc(pushId)
+              .set({
+                Contact: this.ConUser,
+                Building: this.Museum.Building,
+                Amount: this.lines.length * this.Museum.Building.Fees,
+                PaymentMethod: 'Credit/Debit Card',
+                DatePayment: Date.now(),
+                NumberofVisitor: this.lines.length,
+                DateofReserve: this.date + 'T' + this.Museum.Times.Hour,
+                NameofGroup: this.title,
+                Status: 'Paid'
+              })
+              .this.$q.notify({
+                color: 'green-4',
+                message: `Reservation Successfully Done`,
+                icon: 'cloud_done',
+                timeout: 500
+              })
+>>>>>>> 8f4232e2c5205accd7d7a0aa754efc9cec5efc6b
           })
 
           .this.$q.notify({
@@ -1429,6 +1696,7 @@ export default {
           console.log('Error getting document:', error)
         })
     },
+<<<<<<< HEAD
 
     viewQRTicket (arg) {
       this.printqr = true
@@ -1458,6 +1726,8 @@ export default {
 
       console.log()
     },
+=======
+>>>>>>> 8f4232e2c5205accd7d7a0aa754efc9cec5efc6b
     addLine () {
       // let checkEmptyLines = this.lines.filter(line => line.FirstN === null)
       // if (checkEmptyLines.length >= 1 && this.lines.length > 0) {
@@ -1472,6 +1742,7 @@ export default {
     createNewUUID () {
       this.GUID = this.generateUUID()
     },
+<<<<<<< HEAD
     generateUUID () {
       // Public Domain/MIT
       var d = new Date().getTime()
@@ -1489,6 +1760,8 @@ export default {
 
       return newGuid
     },
+=======
+>>>>>>> 8f4232e2c5205accd7d7a0aa754efc9cec5efc6b
 
     removeLine (lineId) {
       if (!this.blockRemoval) {

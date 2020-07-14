@@ -56,6 +56,18 @@ export default function (/* { store, ssrContext } */) {
     base: process.env.VUE_ROUTER_BASE
   })
 
+  // Router.beforeEach((to, from, next) => {
+  //   const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
+  //   const currentUser = firebaseAuth.currentUser
+  //   if (requiresAuth && !currentUser) {
+  //     next('/')
+  //   } else if (requiresAuth && currentUser) {
+  //     next()
+  //   } else {
+  //     next()
+  //   }
+  // })
+
   Router.beforeEach((to, from, next) => {
     firebaseAuth.onAuthStateChanged(userAuth => {
       if (userAuth) {
@@ -63,6 +75,7 @@ export default function (/* { store, ssrContext } */) {
           .then(function ({
             claims
           }) {
+<<<<<<< HEAD
             if (claims.Customer) {
               if (to.path !== '/customerSide' && to.path !== '/customerSide/MyBilling' && to.path !== '/customerSide/accounts/manage') {
                 return next({
@@ -71,10 +84,21 @@ export default function (/* { store, ssrContext } */) {
               }
             } else if (claims.Administrator) {
               if (to.path !== '/adminSide' && to.path !== '/adminSide/reservation' && to.path !== '/adminSide/reservation/list' && to.path !== '/adminSide/visitorslog' && to.path !== '/adminSide/survey' && to.path !== '/adminSide/billing' && to.path !== '/adminSide/scanqr' && to.path !== '/adminSide/accounts' && to.path !== '/adminSide/accounts/manage' && to.path !== '/adminSide/reports' && to.path !== '/adminSide/setting') {
+=======
+            if (claims.customer) {
+              if (to.path !== '/customer') {
+                return next({
+                  path: '/customer'
+                })
+              }
+            } else if (claims.admin) {
+              if (to.path !== '/adminSide' && to.path !== '/adminSide/reservation' && to.path !== '/adminSide/reservation/list' && to.path !== '/adminSide/visitorslog' && to.path !== '/adminSide/survey' && to.path !== '/adminSide/billing' && to.path !== '/adminSide/accounts' && to.path !== '/adminSide/reports' && to.path !== '/adminSide/setting') {
+>>>>>>> 8f4232e2c5205accd7d7a0aa754efc9cec5efc6b
                 next({
                   path: '/adminSide'
                 })
               }
+<<<<<<< HEAD
             } else if (claims.FrontDesk) {
               if (to.path !== '/kioskSide') {
                 next({
@@ -88,6 +112,16 @@ export default function (/* { store, ssrContext } */) {
                 })
               }
             }
+=======
+            }
+            // else if (claims.driver) {
+            //   if (to.path !== '/driver') {
+            //     return next({
+            //       path: '/driver'
+            //     })
+            //   }
+            // }
+>>>>>>> 8f4232e2c5205accd7d7a0aa754efc9cec5efc6b
           })
       } else {
         if (to.matched.some(record => record.meta.requiresAuth)) {

@@ -134,8 +134,12 @@
 </template>
 
 <script>
+<<<<<<< HEAD
 
 import firebase from 'firebase'
+=======
+// import firebase from 'firebase'
+>>>>>>> 8f4232e2c5205accd7d7a0aa754efc9cec5efc6b
 import { firestore, firebaseAuth, firebaseDb } from 'boot/firebase'
 
 export default {
@@ -187,8 +191,12 @@ export default {
         },
         Email: null,
         Password: null,
+<<<<<<< HEAD
         Status: null,
         DateCreated: Date.now()
+=======
+        UserRole: null
+>>>>>>> 8f4232e2c5205accd7d7a0aa754efc9cec5efc6b
       }
     }
   },
@@ -214,6 +222,7 @@ export default {
   },
   firestore () {
     return {
+<<<<<<< HEAD
       UserAccounts: firestore.collection('Users')
     }
   },
@@ -248,12 +257,22 @@ export default {
         appId: '1:267431615019:web:8f25e113159100fc27a86e'
       }, 'authApp')
       var detachedAuth = authApp.auth()
+=======
+      user: firestore.collection('Users').doc(this.userAccount.Email)
+    }
+  },
+  methods: {
+    async addUserAccount (uid, event) {
+>>>>>>> 8f4232e2c5205accd7d7a0aa754efc9cec5efc6b
       this.modalbtn = 'add'
+      // var addMessage = firebase.functions().httpsCallable('AddUserRole')
+      // var data = { role: { [event.target.value]: true } }
       try {
         detachedAuth
           .createUserWithEmailAndPassword(this.Email, this.Password)
           .then(cred => {
             console.log(cred.user.uid)
+<<<<<<< HEAD
             firebaseDb
               .collection('Users')
               .doc(cred.user.uid)
@@ -271,6 +290,16 @@ export default {
                 console.log(cred.user.uid)
               })
 
+=======
+            firebaseDb.collection('Users').doc(cred.user.uid).set({
+              DateCreated: Date.now(),
+              Name: {
+                FirstName: this.userAccount.Name.FirstName,
+                LastName: this.userAccount.Name.LastName
+              },
+              ContactNumber: null
+            })
+>>>>>>> 8f4232e2c5205accd7d7a0aa754efc9cec5efc6b
             this.$q.notify({
               message: 'Added',
               color: 'green-4',
