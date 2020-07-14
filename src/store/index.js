@@ -1,10 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-// import { firebaseDb } from 'src/boot/firebase'
-// import { firebaseAuth, firebaseDb } from 'boot/firebase'
-import storetasks from './storetasks'
 
-// import example from './module-example'
+import storetasks from './storetasks'
 
 Vue.use(Vuex)
 
@@ -19,37 +16,6 @@ Vue.use(Vuex)
 
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
-    // state: {
-    //   events: []
-    // },
-    // getters: {
-    //   EVENTS: state => state.events
-    // },
-    // mutations: {
-    //   ADD_EVENT: (state, event) => {
-    //     state.events.push(event)
-    //   }
-    // },
-    // actions: {
-    //   reservation: ({ commit, payload }) => {
-    //     console.log('payload: ', payload)
-    //     firebaseDb.collection('Reservation').add({
-    //       Date: payload.Date,
-    //       Selection: payload.Selection,
-    //       Time: payload.time,
-    //       Adult: payload.Adult,
-    //       Student: payload.Student,
-    //       Group: payload.Group
-    //     })
-    //       .then(function (docRef) {
-    //         console.log('Document written with ID: ', docRef.id)
-    //       })
-    //       .catch(function (error) {
-    //         console.error('Error adding document: ', error)
-    //       })
-    //   }
-
-    // },
 
     modules: {
       storetasks

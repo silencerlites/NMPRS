@@ -5,10 +5,10 @@
       <q-toolbar>
         <q-toolbar-title>
           <img src="statics/app-logo-80x.svg" style="width:70px;" class="col-12">
-          <span style="font-size:40px; color:#6B1510;">National Museum of the Philippines</span>
+          <span style="font-size:40px; color:#6B1510; padding-left:20px">National Museum of the Philippines</span>
         </q-toolbar-title>
-        <q-btn flat style="font-size:28px; color: #6B1510;" label="Home" />
-        <q-btn flat style="font-size:28px; color: #6B1510;" label="Apps" />
+        <q-btn flat style="font-size:28px; color: #6B1510;" label="Home" to="/"/>
+        <q-btn flat style="font-size:28px; color: #6B1510;" label="Apps" to="/apps"/>
         <q-btn flat style="font-size:28px; color: #6B1510;" label="Login" @click="loginModal"/>
       </q-toolbar>
     </q-header>
@@ -26,17 +26,17 @@
             </q-card-section>
           </q-card>
           <div class="q-pl-md q-pr-md">
-            <q-input standout v-model="email" type="email" prefix="Email:">
+            <q-input standout v-model="form.email" type="email" prefix="Email:" >
                 <template v-slot:prepend>
                 <q-icon name="mail" />
                 </template>
             </q-input>
-            <q-input class="q-pt-md col-12" standout v-model="password" type="password" @keyup.enter="loginModule()" prefix="Password:">
+            <q-input class="q-pt-md col-12" standout v-model="form.password" type="password" @keyup.enter="loginModule()" prefix="Password:">
                 <template v-slot:prepend>
                 <q-icon name="lock" />
                 </template>
             </q-input>
-            <div style="text-align:right; color:grey;"> Forgot your password? </div>
+            <!-- <div style="text-align:right; color:grey;"> Forgot your password? </div> -->
 
           </div>
           <q-card-actions align="center" class="q-pa-md">
@@ -52,15 +52,14 @@
         </q-card>
       </q-dialog>
 
-    <q-page-container>
+    <q-page-container class="landing-page">
       <router-view />
     </q-page-container>
 
-    <q-footer class="bg-grey-1 text-white" style="background-color:white;">
+    <q-footer class="bg-grey-1 text-black">
       <q-toolbar>
-        <q-toolbar-title>
-          <q-avatar>
-          </q-avatar>
+        <q-toolbar-title style="font-size:14px; text-align:center;">
+          © Copyright 2020 National Museum of the Philippines. All Rights Reserved | Design and Develop By Cedric Liera
         </q-toolbar-title>
       </q-toolbar>
     </q-footer>
@@ -69,14 +68,16 @@
 </template>
 
 <script>
-
-import { firebaseAuth } from 'boot/firebase'
+import { mapActions } from 'vuex'
 
 export default {
   data () {
     return {
-      email: null,
-      password: null,
+      form: {
+        email: null,
+        password: null
+      },
+
       login: false
     }
   },
@@ -84,57 +85,21 @@ export default {
     loginModal () {
       this.login = true
     },
-
+    ...mapActions('storetasks', ['loginUser']),
     loginModule () {
-      firebaseAuth.signInWithEmailAndPassword(this.email, this.password)
-        .then((user) => {
-          this.$router.replace('adminSide')
-        })
-        .catch(function (error) {
-        // Handle Errors here.
-          var errorCode = error.code
-          var errorMessage = error.message
-          if (errorCode === 'auth/wrong-password') {
-            alert('Wrong password!')
-          } else {
-            alert(errorMessage)
-          }
-        // ...
-        })
+      this.loginUser(this.form)
     }
-
-    // loginSignup () {
-    //   try {
-    //     firebaseAuth.createUserWithEmailAndPassword(this.email, this.password)
-    //       .then((user) => {
-    //         this.$router.replace('adminSide')
-    //       })
-    //       .catch(function (error) {
-    //       // Handle Errors here.
-    //         var errorCode = error.code
-    //         var errorMessage = error.message
-    //         if (errorCode === 'auth/weak-password') {
-    //           alert('The password is too weak.')
-    //         } else {
-    //           alert(errorMessage)
-    //         }
-    //       })
-    //     this.$q.notify({
-    //       message: 'Added',
-    //       color: 'green-4',
-    //       textColor: 'white',
-    //       icon: 'cloud_done'
-    //     })
-    //   } catch (error) {
-    //     this.$q.notify({
-    //       message: error,
-    //       color: 'red',
-    //       textColor: 'white',
-    //       icon: 'clear'
-    //     })
-    //   }
-    // }
-
   }
 }
 </script>
+
+<style>
+
+.landing-page {
+    background-image: url(../statics/3860710.svg);
+    height: 100%;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+</style>

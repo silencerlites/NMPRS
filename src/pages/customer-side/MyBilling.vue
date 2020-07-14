@@ -1,17 +1,6 @@
 <template>
   <q-page class="q-pa-md">
     <div class="column">
-
-      <div class="col-1 q-pb-md">
-      <q-btn
-                color="green"
-                label="Make Payment"
-                style="float:right;"
-                @click="walkinpaymentCash=true"
-
-              />
-      </div>
-
       <!-- Add User -->
       <q-dialog
       persistent
@@ -167,57 +156,6 @@
     </q-dialog>
 
     <q-dialog
-      v-model="walkinpaymentCash"
-    >
-      <q-card style="width: 450px; max-width: 80vw;">
-             <q-card-section class="bg-primary text-white">
-        <div class="text-h6">Payment for Cash</div>
-      </q-card-section>
-
-        <q-card-section class="q-pt-md">
-          <div class="col-12">
-                  Select Museum
-                  <q-select
-                    outlined
-                    name="AvailBuild"
-                    v-model="Museum.Building"
-                    :options="Building"
-                    option-value="NameBuilding"
-                    option-label="NameBuilding"
-                  />
-                </div>
-          <div class="row">
-               <div class="col-8">
-        <q-input v-model="Name" label="Name" stack-label  />
-              </div>
-              <div class="col-4">
-                Total Amount :
-                <br>
-                <b
-                  style="color:#d35400; font-size:20px;"
-                >&#x20B1;  {{ this.numVisitor * this.Museum.Building.Fees }}</b>
-              </div>
-          </div>
-          <q-input v-model="orno" label="O.R No" stack-label  />
-           <q-input v-model="numVisitor" type="number" label="Number of Visitors" stack-label/>
-
-           <q-input v-model="payCashs" type="number" label="Payment" stack-label  prefix="₱"/>
-           <div class="col-4 q-pt-md" v-if="!this.payCashs == ''">
-                Change:
-                <b
-                  style="color:#2ecc71;"
-                >&#x20B1; {{ this.payCashs - (this.numVisitor * this.Museum.Building.Fees)  }}</b>
-              </div>
-        </q-card-section>
-
-        <q-card-actions align="right" class="bg-white text-teal">
-          <q-btn flat v-close-popup label="Make Payment" @click="addPaymentCash"/>
-          <q-btn flat v-close-popup class="bg-white text-red">Cancel</q-btn>
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
-
-    <q-dialog
       v-model="paymentCash"
     >
       <q-card style="width: 450px; max-width: 80vw;">
@@ -301,9 +239,6 @@
                   </q-badge>
                   </q-td>
                 <q-td auto-width key="action">
-                  <q-btn dense round flat color="orange" icon="payment" @click="payCash(props.row)" v-if="props.row.Status == 'Unpaid'">
-                    <q-tooltip content-class="bg-primary">Make Payment</q-tooltip>
-                  </q-btn>
                   <q-btn dense round flat color="blue" @click="viewListBilling(props.row)" icon="print">
                     <q-tooltip content-class="bg-primary">Print</q-tooltip>
                   </q-btn>
@@ -319,7 +254,7 @@
 </template>
 
 <script>
-import { firestore } from 'boot/firebase'
+import { firestore, firebaseAuth } from 'boot/firebase'
 import moment from 'moment'
 
 export default {
@@ -328,13 +263,6 @@ export default {
   },
   data () {
     return {
-      numVisitor: null,
-      pagination: {
-        sortBy: 'date',
-        rowsPerPage: 12,
-        descending: true // current rows per page being displayed
-      },
-      walkinpaymentCash: false,
       payCashs: null,
       orno: '',
       paymentCash: false,
@@ -364,7 +292,8 @@ export default {
       },
       StatusArrival: false,
       lines: [],
-      Name: null,
+      FirstN: null,
+      LastN: null,
       Destination: null,
       Gender: null,
       Type: null,
@@ -380,6 +309,11 @@ export default {
       step: 1,
       viewvi: [],
       userAccountModal: false,
+      pagination: {
+        sortBy: 'date',
+        rowsPerPage: 12,
+        descending: true // current rows per page being displayed
+      },
       columns: [
         {
           name: 'ref',
@@ -419,70 +353,17 @@ export default {
     }
   },
   firestore () {
+    const user = firebaseAuth.currentUser
     return {
-      Billing: firestore.collection('Billing'),
-      Payment: firestore.collection('Payment'),
-      Building: firestore.collection('MuseumBuilding')
+      Billing: firestore.collection('Billing').where('UserId', '==', user.uid),
+      Billings: firestore.collection('Billing'),
+      Payment: firestore.collection('Payment')
     }
   },
   methods: {
     print () {
       // Pass the element id here
       this.$htmlToPaper('vBill')
-    },
-    addPaymentCash () {
-      try {
-        var Reserve = {
-          Contact: {
-            ConNum: null,
-            Email: null,
-            Name: this.Name
-
-          },
-          Building: this.Museum.Building,
-          Amount: this.numVisitor * this.Museum.Building.Fees,
-          PaymentMethod: 'Cash',
-          DatePayment: moment().format('L'),
-          NumberofVisitor: this.numVisitor,
-          DateofReserve: null,
-          NameofGroup: null,
-          Status: 'Paid'
-
-        }
-        this.$firestore.Billing
-          .add(Reserve)
-          .then(docRef => {
-            this.$firestore.Payment.doc(this.arg.id).set({
-              ORno: this.orno,
-              amount: this.numVisitor * this.Museum.Building.Fees,
-              Change: this.payCashs - (this.numVisitor * this.Museum.Building.Fees),
-              date: moment().format('L'),
-              type: 'Cash',
-              payment_method_details: {
-                card: {
-                  brand: null
-                },
-                type: 'Cash'
-              }
-            })
-          })
-          .catch(function (error) {
-            console.error('Error adding document: ', error)
-          })
-        this.$q.notify({
-          message: 'Successfully Added',
-          color: 'green-4',
-          textColor: 'white',
-          icon: 'cloud_done'
-        })
-      } catch (error) {
-        this.$q.notify({
-          message: 'Data Failed' + error,
-          color: 'red',
-          textColor: 'white',
-          icon: 'clear'
-        })
-      }
     },
     payCash (arg) {
       this.arg = arg
@@ -535,7 +416,7 @@ export default {
     viewListBilling (arg) {
       this.viewBill = true
       this.idVisit = arg.id
-      var docRef = this.$firestore.Billing.doc(arg.id)
+      var docRef = this.$firestore.Billings.doc(arg.id)
       var docRefs = this.$firestore.Payment.doc(arg.id)
 
       docRef.get().then(doc => {

@@ -2,11 +2,17 @@
   <q-page class="q-pa-md">
     <div class="column">
       <div class="col-1 q-pb-md">
-        <span style="font-size:25px; color:#5a5c69!important;">Reservation List</span>
-        <q-btn color="green" label="Go Back" style="float:right;" to="/adminSide/reservation" />
+        <span style="font-size:25px; color:#5a5c69!important;">My Reservation</span>
+        <q-btn
+          color="green"
+          label="Make a reservation"
+          style="float:right;"
+          @click="(modalbtn = 'add'), (addReg = true), (step = 1), (addLine())"
+          v-on:click.prevent="createNewUUID()"
+        />
       </div>
       <!-- Add Registration -->
-      <q-dialog
+     <q-dialog
         v-model="addReg"
         persistent
         transition-show="scale"
@@ -241,39 +247,34 @@
               style="min-height: 100px"
               :done="step > 4"
             >
-              <div class="col-12">
-                Name
-                <q-input outlined v-model="ConUser.Name" />
+              <div class="row">
+                <div class="col-6 q-pr-md">
+                  First Name
+                  <q-input outlined v-model="this.User.Name.FirstName" disable readonly/>
+                </div>
+
+                <div class="col-6">
+                  Last Name
+                  <q-input outlined v-model="this.User.Name.LastName" disable readonly/>
+                </div>
               </div>
               <div class="col-6">
                 Contact Number
-                <q-input
-                  outlined
-                  v-model="ConUser.ConNum"
-                  mask="(+63) #### - ######"
-                  unmasked-value
-                />
+                <q-input outlined v-model="this.User.ContactNumber" mask="(+63) #### - ######"
+                  unmasked-value disable readonly/>
               </div>
               <div class="col-6">
                 Email
-                <q-input outlined v-model="ConUser.Email" />
+                <q-input outlined v-model="this.User.email" disable readonly/>
               </div>
 
               <q-stepper-navigation>
-                <q-btn
-                  @click="
-                    () => {
-                      step = 5;
-                    }
-                  "
-                  color="primary"
-                  label="Continue"
-                />
+                <q-btn @click="() => { step = 5 }" color="primary" label="Continue" />
                 <q-btn flat @click="step = 3" color="primary" label="Back" class="q-ml-sm" />
                 <q-btn v-close-popup flat color="red" label="Cancel" />
               </q-stepper-navigation>
             </q-step>
-            <q-step
+             <q-step
               :name="5"
               title="Billing & Payment"
               icon="add_comment"
@@ -297,14 +298,16 @@
                         <div class="col-8">
                           Name:
                           <br />
-                          <b class="text-h5">{{ this.ConUser.Name }}</b>
+                          <b
+                            class="text-h5"
+                          >{{ this.User.Name.FirstName + ' ' + this.User.Name.LastName }}</b>
                         </div>
                         <div class="col-4" style="float-right">
                           <q-icon name="phone_android" size="1.3rem" />
-                          {{ this.ConUser.ConNum }}
+                          {{ this.User.ContactNumber}}
                           <br />
                           <q-icon name="mail" size="1.3rem" />
-                          {{ this.ConUser.Email }}
+                          {{ this.User.email}}
                         </div>
                       </div>
                       <q-separator class="q-mb-sm q-mt-sm" />
@@ -314,20 +317,12 @@
                         <div class="col-8">
                           Building:
                           <br />
-                          <b class="text-h7">
-                            {{
-                            this.Museum.Building.NameBuilding
-                            }}
-                          </b>
+                          <b class="text-h7">{{ this.Museum.Building.NameBuilding }}</b>
                         </div>
                         <div class="col-4">
                           Date: {{ this.date | timeformatDate }}
                           <br />
-                          Time:
-                          {{
-                          (this.date + "T" + this.Museum.Times.Hour)
-                          | timeformatTime
-                          }}
+                          Time: {{ this.date + 'T' + this.Museum.Times.Hour | timeformatTime }}
                         </div>
                       </div>
                       <div class="row q-mt-xs">
@@ -354,12 +349,10 @@
                         <div class="col-4">
                           Total Amount :
                           <br />
-                          <b class="text-h6" style="color:#d35400">
-                            &#x20B1;
-                            {{
-                            this.lines.length * this.Museum.Building.Fees
-                            }}
-                          </b>
+                          <b
+                            class="text-h6"
+                            style="color:#d35400"
+                          >&#x20B1; {{ this.lines.length * this.Museum.Building.Fees }}</b>
                         </div>
                       </div>
                     </q-card-section>
@@ -404,10 +397,7 @@
                                   </q-tab-panel>
 
                                   <q-tab-panel name="Cash">
-                                    <span>
-                                      Please settle a payment through our
-                                      cashier
-                                    </span>
+                                    <span>Please settle a payment through our cashier</span>
                                   </q-tab-panel>
                                 </q-tab-panels>
                               </template>
@@ -422,7 +412,7 @@
 
               <q-stepper-navigation>
                 <q-btn
-                  v-if="method == 'Card'"
+                  v-if="method== 'Card'"
                   @click="placeOrderButtonPressed"
                   :disabled="!complete"
                   color="green"
@@ -430,7 +420,7 @@
                   v-close-popup
                 />
                 <q-btn
-                  v-if="method == 'Cash'"
+                  v-if="method== 'Cash'"
                   @click="addReservationCash"
                   color="primary"
                   label="Reserve"
@@ -450,6 +440,7 @@
           </q-stepper>
         </template>
       </q-dialog>
+
       <!-- Reschedule -->
       <q-dialog
         v-model="editReg"
@@ -615,43 +606,11 @@
           </q-stepper>
         </template>
       </q-dialog>
-    </div>
-
-    <div class="row">
-      <q-dialog v-model="alertDelete">
-        <q-card>
-          <q-card-section>
-            <img src="statics/undraw_throw_away_ldjd.svg" alt style="height:250px" class="q-pa-lg" />
-          </q-card-section>
-
-          <q-card-section class="q-pt-none">
-            <div class="text-h4 text-center" style="font-weight:bold">Are you Sure?</div>
-            <div class="text-h9 text-center">You won't be able to revert this!</div>
-          </q-card-section>
-
-          <q-card-actions align="center" class="q-pa-md q-pb-lg">
-            <q-btn
-              v-model="delbtn"
-              v-close-popup
-              color="primary"
-              label="Yes, delete it!"
-              @click="deleteRow()"
-              class="col-5"
-            />
-            <q-btn v-close-popup color="red" label="Cancel" class="col-5" />
-          </q-card-actions>
-        </q-card>
-      </q-dialog>
 
       <q-dialog v-model="alertCancel">
         <q-card>
           <q-card-section>
-            <img
-              src="statics/undraw_stranded_traveler_pdbw.svg"
-              alt
-              style="height:250px"
-              class="q-pa-lg"
-            />
+            <img src="statics/undraw_stranded_traveler_pdbw.svg" alt style="height:250px" class="q-pa-lg" />
           </q-card-section>
 
           <q-card-section class="q-pt-none">
@@ -672,43 +631,19 @@
           </q-card-actions>
         </q-card>
       </q-dialog>
+    </div>
 
-      <q-dialog v-model="alertArrived">
-        <q-card>
-          <q-card-section>
-            <img src="statics/undraw_aircraft_fbvl.svg" alt style="height:250px" class="q-pa-lg" />
-          </q-card-section>
-
-          <q-card-section class="q-pt-none">
-            <div class="text-h4 text-center" style="font-weight:bold">Are you Sure?</div>
-            <div class="text-h9 text-center">You won't be able to revert this!</div>
-          </q-card-section>
-
-          <q-card-actions align="center" class="q-pa-md q-pb-lg">
-            <q-btn
-              v-model="delbtn"
-              v-close-popup
-              color="primary"
-              label="Yes, They Arrived!"
-              @click="arrivedDone()"
-              class="col-5"
-            />
-            <q-btn v-close-popup color="red" label="Cancel" class="col-5" />
-          </q-card-actions>
-        </q-card>
-      </q-dialog>
-
+    <div class="row">
       <!-- table -->
       <template>
         <div class="col-xs-12 col-sm-12 col-md-12">
           <q-table
-            title="Reservation Details"
-            :data="reservations"
+            :data="viewReservations"
             :columns="columns"
             :pagination="pagination"
             row-key="id"
           >
-            <template v-slot:top-right>
+            <!-- <template v-slot:top-right>
               <q-btn
                 color="green"
                 label="ADD"
@@ -716,7 +651,7 @@
                 @click="(modalbtn = 'add'), (addReg = true), (step = 1), (addLine())"
                 v-on:click.prevent="createNewUUID()"
               />
-            </template>
+            </template> -->
             <template v-slot:body="props">
               <q-tr :props="props">
                 <q-td :props="props" key="date">{{ props.row.date }}</q-td>
@@ -782,26 +717,12 @@
                     dense
                     round
                     flat
-                    color="green"
-                    @click="arralert(props.row)"
-                    icon="flight_takeoff"
-                    v-if="props.row.StatusArrival == 'Pending'"
-                  >
-                    <q-tooltip content-class="bg-primary">Arrived</q-tooltip>
-                  </q-btn>
-                  <q-btn
-                    dense
-                    round
-                    flat
                     color="red"
                     @click="canalert(props.row)"
                     icon="cancel_schedule_send"
                     v-if="props.row.StatusArrival == 'Pending'"
                   >
                     <q-tooltip content-class="bg-primary">Cancel Reservation</q-tooltip>
-                  </q-btn>
-                  <q-btn dense round flat color="red" @click="delalert(props.row)" icon="delete">
-                    <q-tooltip content-class="bg-primary">Delete</q-tooltip>
                   </q-btn>
                 </q-td>
               </q-tr>
@@ -813,44 +734,44 @@
     <q-dialog v-model="viewList">
       <q-card flat bordered class="my-card bg-grey-1" style="width:1500px; max-width:1500px">
         <div id="vBill">
+        <q-card-section>
+          <div style="text-align:center;">
+            <img src="statics/app-logo-80x.svg" style="width:100px;" class="q-mr-lg" />
+            <br />
+            <span style="font-size:30px; color:#6B1510;">National Museum of the Philippines</span>
+          </div>
+          <q-separator style="background:#6B1510" class="q-mb-xs q-mt-xs" />
+
           <q-card-section>
-            <div style="text-align:center;">
-              <img src="statics/app-logo-80x.svg" style="width:100px;" class="q-mr-lg" />
-              <br />
-              <span style="font-size:30px; color:#6B1510;">National Museum of the Philippines</span>
-            </div>
-            <q-separator style="background:#6B1510" class="q-mb-xs q-mt-xs" />
-
-            <q-card-section>
-              <div class="row">
-                <div class="col" style="color:#6B1510;">
-                  <b>Name</b>
-                </div>
-                <div class="col" style="color:#6B1510;">
-                  <b>Gender</b>
-                </div>
-                <div class="col" style="color:#6B1510;">
-                  <b>Visitor Type</b>
-                </div>
-                <div class="col" style="color:#6B1510;">
-                  <b>Category of Visitors</b>
-                </div>
-                <div class="col" style="color:#6B1510;">
-                  <b>Student Level</b>
-                </div>
+            <div class="row">
+              <div class="col" style="color:#6B1510;">
+                <b>Name</b>
               </div>
-            </q-card-section>
-
-            <div v-for="(line, index) in lines" :key="index" class="row q-pb-md">
-              <div class="col">{{ ++index + "." + " " + line.FirstN + " " + line.LastN }}</div>
-              <div class="col">{{ line.Gender }}</div>
-              <div class="col">{{ line.VisitorType }}</div>
-              <div class="col">{{ line.Type }}</div>
-              <div class="col">{{ line.SubType }}</div>
+              <div class="col" style="color:#6B1510;">
+                <b>Gender</b>
+              </div>
+              <div class="col" style="color:#6B1510;">
+                <b>Visitor Type</b>
+              </div>
+              <div class="col" style="color:#6B1510;">
+                <b>Category of Visitors</b>
+              </div>
+              <div class="col" style="color:#6B1510;">
+                <b>Student Level</b>
+              </div>
             </div>
           </q-card-section>
-          <q-separator />
+
+          <div v-for="(line, index) in lines" :key="index" class="row q-pb-md">
+            <div class="col">{{ ++index + "." + " " + line.FirstN + " " + line.LastN }}</div>
+            <div class="col">{{ line.Gender }}</div>
+            <div class="col">{{ line.VisitorType }}</div>
+            <div class="col">{{ line.Type }}</div>
+            <div class="col">{{ line.SubType }}</div>
+          </div>
+        </q-card-section>
         </div>
+        <q-separator />
 
         <q-card-actions>
           <q-btn flat v-close-popup>OK</q-btn>
@@ -1013,9 +934,9 @@
       </q-card>
     </q-dialog>
 
-    <!-- Ticket QR -->
+    <!-- QR TICKET -->
 
-    <q-dialog v-model="printqr">
+     <q-dialog v-model="printqr">
       <q-card style="max-width: 1000px;">
         <div id="vBill">
            <q-card-section align="center" class="text-h4">Printable QR Ticket</q-card-section>
@@ -1066,27 +987,26 @@
 
 <script>
 import firebase from 'firebase'
-import { firestore } from 'boot/firebase'
+import { firestore, firebaseAuth } from 'boot/firebase'
 import { Card, createToken } from 'vue-stripe-elements-plus'
 import moment from 'moment'
-import { QrcodeStream } from 'vue-qrcode-reader'
+import { mapState } from 'vuex'
 import QrcodeVue from 'qrcode.vue'
 
 export default {
   name: 'PageIndex',
-  // eslint-disable-next-line vue/no-unused-components
-  components: { Card, QrcodeVue, QrcodeStream },
+  components: { Card, QrcodeVue },
   data () {
     return {
       printqr: false,
-      destroyed: false,
-      isValid: undefined,
-      camera: 'auto',
-      result: null,
-      qrscan: false,
       GUID: this.generateUUID,
       value: null,
       size: 200,
+      pagination: {
+        sortBy: 'date',
+        rowsPerPage: 12,
+        descending: true // current rows per page being displayed
+      },
       SubCategory: {
         value: '',
         label: '',
@@ -1117,7 +1037,6 @@ export default {
       },
       StatusArrival: false,
       lines: [],
-      liness: [],
       FirstN: null,
       LastN: null,
       Destination: null,
@@ -1135,11 +1054,6 @@ export default {
       activeItem: null,
       step: 1,
       viewvi: [],
-      pagination: {
-        sortBy: 'date',
-        rowsPerPage: 12,
-        descending: true // current rows per page being displayed
-      },
       columns: [
         {
           name: 'date',
@@ -1189,12 +1103,15 @@ export default {
   },
 
   firestore () {
+    const user = firebaseAuth.currentUser
     return {
+      User: firestore.collection('Users').doc(user.uid),
       VisitorL: firestore.collection('VisitorsLog'),
       Types: firestore.collection('TypeVisitor'),
       Category: firestore.collection('Category'),
       SubCategory: firestore.collection('SubCategory'),
       Genders: firestore.collection('Gender'),
+      viewReservations: firestore.collection('Reservation').where('UserId', '==', user.uid),
       reservations: firestore.collection('Reservation'),
       Building: firestore.collection('MuseumBuilding'),
       OperationHours: firestore
@@ -1207,58 +1124,33 @@ export default {
   },
 
   methods: {
-    async reload () {
-      this.destroyed = true
+    viewQRTicket (arg) {
+      this.printqr = true
+      this.idVisit = arg.id
+      var docRef = this.$firestore.VisitorL.doc(arg.id)
+      var docRefs = this.$firestore.reservations.doc(arg.id)
 
-      await this.$nextTick()
+      docRef
+        .get()
+        .then(doc => {
+          console.log('Cached document data:', doc.data())
+          this.liness = doc.data().ListVisitors
+        })
+        .catch(function (error) {
+          console.log('Error getting document:', error)
+        })
 
-      this.destroyed = false
-      this.turnCameraOn()
-    },
-    onInit (promise) {
-      promise.catch(console.error).then(this.resetValidationState)
-    },
+      docRefs
+        .get()
+        .then(doc => {
+          console.log('Cached document data:', doc.data())
+          this.Museum.Building = doc.data().Building.NameBuilding
+        })
+        .catch(function (error) {
+          console.log('Error getting document:', error)
+        })
 
-    resetValidationState () {
-      this.isValid = undefined
-    },
-
-    async onDecode (content) {
-      this.result = content
-      this.turnCameraOff()
-
-      // pretend it's taking really long
-      await this.timeout(3000)
-      this.isValid = content.startsWith('NMP')
-
-      // some more delay, so users have time to read the message
-      await this.timeout(2000)
-      var listVist = {
-        ListVisitors: this.liness
-      }
-      this.$firestore.VisitorLogs.doc(this.arg.id)
-        .update(listVist)
-        .then(docRef => {})
-      this.$q.notify({
-        message: 'Successfully Added',
-        color: 'green-4',
-        textColor: 'white',
-        icon: 'cloud_done'
-      })
-    },
-
-    turnCameraOn () {
-      this.camera = 'auto'
-    },
-
-    turnCameraOff () {
-      this.camera = 'off'
-    },
-
-    timeout (ms) {
-      return new Promise(resolve => {
-        window.setTimeout(resolve, ms)
-      })
+      console.log()
     },
     print () {
       // Pass the element id here
@@ -1313,8 +1205,13 @@ export default {
         end: this.date + 'T' + this.Museum.ETimes.Hour,
         NumberofVisitor: this.lines.length,
         Building: this.Museum.Building,
-        Contact: this.ConUser,
-        StatusArrival: 'Pending'
+        StatusArrival: 'Pending',
+        Contact: {
+          Name: this.User.Name.FirstName + ' ' + this.User.Name.LastName,
+          ConNum: this.User.ContactNumber,
+          Email: this.User.email
+        },
+        UserId: this.User.id
       }
 
       db.collection('Payment')
@@ -1364,7 +1261,8 @@ export default {
             NumberofVisitor: this.lines.length,
             DateofReserve: this.date + 'T' + this.Museum.Times.Hour,
             NameofGroup: this.title,
-            Status: 'Paid'
+            Status: 'Paid',
+            UserId: this.User.id
           })
 
           .this.$q.notify({
@@ -1402,6 +1300,7 @@ export default {
 
       console.log()
     },
+
     viewListBilling (arg) {
       this.viewBill = true
       this.idVisit = arg.id
@@ -1428,35 +1327,6 @@ export default {
         .catch(function (error) {
           console.log('Error getting document:', error)
         })
-    },
-
-    viewQRTicket (arg) {
-      this.printqr = true
-      this.idVisit = arg.id
-      var docRef = this.$firestore.VisitorL.doc(arg.id)
-      var docRefs = this.$firestore.reservations.doc(arg.id)
-
-      docRef
-        .get()
-        .then(doc => {
-          console.log('Cached document data:', doc.data())
-          this.liness = doc.data().ListVisitors
-        })
-        .catch(function (error) {
-          console.log('Error getting document:', error)
-        })
-
-      docRefs
-        .get()
-        .then(doc => {
-          console.log('Cached document data:', doc.data())
-          this.Museum.Building = doc.data().Building.NameBuilding
-        })
-        .catch(function (error) {
-          console.log('Error getting document:', error)
-        })
-
-      console.log()
     },
     addLine () {
       // let checkEmptyLines = this.lines.filter(line => line.FirstN === null)
@@ -1507,8 +1377,13 @@ export default {
           end: this.date + 'T' + this.Museum.ETimes.Hour,
           NumberofVisitor: this.lines.length,
           Building: this.Museum.Building,
-          Contact: this.ConUser,
-          StatusArrival: 'Pending'
+          StatusArrival: 'Pending',
+          Contact: {
+            Name: this.User.Name.FirstName + ' ' + this.User.Name.LastName,
+            ConNum: this.User.ContactNumber,
+            Email: this.User.email
+          },
+          UserId: this.User.id
         }
         var Rep = {
           Building: this.Museum.Building.NameBuilding,
@@ -1528,6 +1403,7 @@ export default {
           Status: 'Pending',
           DateofRecord: moment(this.date).format('L')
         }
+
         this.$firestore.reservations
           .add(Reserve)
           .then(docRef => {
@@ -1538,7 +1414,11 @@ export default {
               visitorType: 'reservation'
             })
             this.$firestore.Billing.doc(docRef.id).set({
-              Contact: this.ConUser,
+              Contact: {
+                Name: this.User.Name.FirstName + ' ' + this.User.Name.LastName,
+                ConNum: this.User.ContactNumber,
+                Email: this.User.email
+              },
               Building: this.Museum.Building,
               Amount: this.lines.length * this.Museum.Building.Fees,
               PaymentMethod: 'Cash',
@@ -1546,7 +1426,8 @@ export default {
               NumberofVisitor: this.lines.length,
               DateofReserve: this.date + 'T' + this.Museum.Times.Hour,
               NameofGroup: this.title,
-              Status: 'Unpaid'
+              Status: 'Unpaid',
+              UserId: this.User.id
             })
             this.$firestore.Report.doc(docRef.id).set(Rep)
           })
@@ -1571,6 +1452,23 @@ export default {
 
     addReservationNoPayment () {
       try {
+        var Reserve = {
+          title: this.title,
+          date: moment(this.date).format('L'),
+          time: this.Museum.Times.Hour + ' - ' + this.Museum.ETimes.Hour,
+          color: this.Museum.Building.Color,
+          start: this.date + 'T' + this.Museum.Times.Hour,
+          end: this.date + 'T' + this.Museum.ETimes.Hour,
+          NumberofVisitor: this.lines.length,
+          Building: this.Museum.Building,
+          Contact: {
+            Name: this.User.Name.FirstName + ' ' + this.User.Name.LastName,
+            ConNum: this.User.ContactNumber,
+            Email: this.User.email
+          },
+          UserId: this.User.id,
+          StatusArrival: 'Pending'
+        }
         var Rep = {
           Building: this.Museum.Building.NameBuilding,
           Male: this.totalMale,
@@ -1589,18 +1487,7 @@ export default {
           Status: 'Pending',
           DateofRecord: moment(this.date).format('L')
         }
-        var Reserve = {
-          title: this.title,
-          date: moment(this.date).format('L'),
-          time: this.Museum.Times.Hour + ' - ' + this.Museum.ETimes.Hour,
-          color: this.Museum.Building.Color,
-          start: this.date + 'T' + this.Museum.Times.Hour,
-          end: this.date + 'T' + this.Museum.ETimes.Hour,
-          NumberofVisitor: this.lines.length,
-          Building: this.Museum.Building,
-          Contact: this.ConUser,
-          StatusArrival: 'Pending'
-        }
+
         this.$firestore.reservations
           .add(Reserve)
           .then(docRef => {
@@ -1611,7 +1498,11 @@ export default {
               visitorType: 'reservation'
             })
             this.$firestore.Billing.doc(docRef.id).set({
-              Contact: this.ConUser,
+              Contact: {
+                Name: this.User.Name.FirstName + ' ' + this.User.Name.LastName,
+                ConNum: this.User.ContactNumber,
+                Email: this.User.email
+              },
               Building: this.Museum.Building,
               Amount: this.lines.length * this.Museum.Building.Fees,
               PaymentMethod: '',
@@ -1619,6 +1510,7 @@ export default {
               DateofReserve: this.date + 'T' + this.Museum.Times.Hour,
               DatePayment: Date.now(),
               NameofGroup: this.title,
+              UserId: this.User.id,
               Status: 'Paid'
             })
             this.$firestore.Report.doc(docRef.id).set(Rep)
@@ -1670,22 +1562,31 @@ export default {
           start: this.date + 'T' + this.Museum.Times.Hour,
           end: this.date + 'T' + this.Museum.ETimes.Hour,
           Building: this.Museum.Building,
-          Contact: this.ConUser,
+          Contact: {
+            Name: this.User.Name.FirstName + ' ' + this.User.Name.LastName,
+            ConNum: this.User.ContactNumber,
+            Email: this.User.email
+          },
           StatusArrival: 'Pending'
         }
-        this.$firestore.reservations.doc(this.Reserve.id).update(Reserve)
+        this.$firestore.reservations
+          .doc(this.Reserve.id)
+          .update(Reserve)
 
-        this.$firestore.Billing.doc(this.Reserve.id)
-          .update({
-            Contact: this.ConUser,
-            DateofReserve: this.date + 'T' + this.Museum.Times.Hour,
-            NameofGroup: this.title
-          })
+        this.$firestore.Billing.doc(this.Reserve.id).update({
+          Contact: {
+            Name: this.User.Name.FirstName + ' ' + this.User.Name.LastName,
+            ConNum: this.User.ContactNumber,
+            Email: this.User.email
+          },
+          DateofReserve: this.date + 'T' + this.Museum.Times.Hour,
+          NameofGroup: this.title
+        })
 
           .catch(function (error) {
             console.error('Error adding document: ', error)
           })
-        // do something
+          // do something
         this.$q.notify({
           color: 'green-4',
           message: `Udated Succefully`,
@@ -1704,10 +1605,6 @@ export default {
     canalert (Reserve) {
       this.alertCancel = true
       this.Reserve = Reserve
-    },
-    arralert (Arrived) {
-      this.alertArrived = true
-      this.Arrived = Arrived
     },
     cancelReserve () {
       try {
@@ -1734,85 +1631,13 @@ export default {
           .catch(function (error) {
             console.error('Error adding document: ', error)
           })
-        // do something
+          // do something
         this.$q.notify({
           color: 'green-4',
           message: `Cancel Reservation Successfully. Note: if you have card payment it takes 5-10 days for refund`,
           icon: 'done',
-          timeout: 9000
-        })
-      } catch (error) {
-        this.$q.notify({
-          message: 'Data Failed' + error,
-          color: 'red',
-          textColor: 'white',
-          icon: 'clear'
-        })
-      }
-    },
-    arrivedDone () {
-      try {
-        var Reserve = {
-          StatusArrival: 'Arrived'
-        }
-        var Arrival = {
-          arrivalStatus: 'Arrived'
-        }
-        var Rep = {
-          Status: 'Arrived'
-        }
-        this.$firestore.reservations
-          .doc(this.Arrived.id)
-          .update(Reserve)
-          .then(docRef => {
-            this.$firestore.VisitorL.doc(this.Arrived.id).update(Arrival)
-            this.$firestore.Report.doc(this.Arrived.id).update(Rep)
-          })
-          .catch(function (error) {
-            console.error('Error adding document: ', error)
-          })
-        // do something
-        this.$q.notify({
-          color: 'green-4',
-          message: `Arrived Successfully`,
-          icon: 'done',
           timeout: 900
         })
-      } catch (error) {
-        this.$q.notify({
-          message: 'Data Failed' + error,
-          color: 'red',
-          textColor: 'white',
-          icon: 'clear'
-        })
-      }
-    },
-    delalert (Reserve) {
-      this.alertDelete = true
-      this.Reserve = Reserve
-    },
-    deleteRow () {
-      try {
-        this.$firestore.reservations
-          .doc(this.Reserve.id)
-          .delete()
-          .then(docRef => {
-            this.$firestore.VisitorL.doc(this.Reserve.id).delete()
-            this.$firestore.Billing.doc(this.Reserve.id).delete()
-            this.$firestore.Payment.doc(this.Reserve.id).delete()
-            this.$firestore.Report.doc(this.Reserve.id).delete()
-          })
-          .catch(function (error) {
-            console.error('Error adding document: ', error)
-          })
-        this.$q.notify({
-          color: 'green-4',
-          message: `Deleted Successfully`,
-          icon: 'delete',
-          timeout: 900
-        })
-
-        // do something
       } catch (error) {
         this.$q.notify({
           message: 'Data Failed' + error,
@@ -1822,15 +1647,21 @@ export default {
         })
       }
     }
+
   },
   mounted () {
     this.GUID = this.generateUUID()
+  },
+  created () {
+    var user = firebaseAuth.currentUser
+    this.FirstN = user.Name
   },
   computed: {
     shownUUID: function () {
       var newGuid = this.GUID
       return newGuid
     },
+    ...mapState('storetasks', ['userDetails']),
     // Gender
     totalMale: function () {
       return this.lines.reduce(function (n, line) {
@@ -1900,6 +1731,9 @@ export default {
       return this.lines.reduce(function (n, line) {
         return n + (line.SubType === 'College')
       }, 0)
+    },
+    reservationsync: function () {
+      return this.viewReservations
     }
   }
 }

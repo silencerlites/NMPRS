@@ -618,31 +618,6 @@
     </div>
 
     <div class="row">
-      <q-dialog v-model="alertDelete">
-        <q-card>
-          <q-card-section>
-            <img src="statics/undraw_throw_away_ldjd.svg" alt style="height:250px" class="q-pa-lg" />
-          </q-card-section>
-
-          <q-card-section class="q-pt-none">
-            <div class="text-h4 text-center" style="font-weight:bold">Are you Sure?</div>
-            <div class="text-h9 text-center">You won't be able to revert this!</div>
-          </q-card-section>
-
-          <q-card-actions align="center" class="q-pa-md q-pb-lg">
-            <q-btn
-              v-model="delbtn"
-              v-close-popup
-              color="primary"
-              label="Yes, delete it!"
-              @click="deleteRow()"
-              class="col-5"
-            />
-            <q-btn v-close-popup color="red" label="Cancel" class="col-5" />
-          </q-card-actions>
-        </q-card>
-      </q-dialog>
-
       <q-dialog v-model="alertCancel">
         <q-card>
           <q-card-section>
@@ -799,9 +774,6 @@
                     v-if="props.row.StatusArrival == 'Pending'"
                   >
                     <q-tooltip content-class="bg-primary">Cancel Reservation</q-tooltip>
-                  </q-btn>
-                  <q-btn dense round flat color="red" @click="delalert(props.row)" icon="delete">
-                    <q-tooltip content-class="bg-primary">Delete</q-tooltip>
                   </q-btn>
                 </q-td>
               </q-tr>
@@ -1827,6 +1799,29 @@ export default {
     this.GUID = this.generateUUID()
   },
   computed: {
+    validationPending () {
+      return this.isValid === undefined && this.camera === 'off'
+    },
+
+    validationSuccess () {
+      return this.isValid === true
+    },
+
+    validationFailure () {
+      return this.isValid === false
+    },
+    filteredReservationData () {
+      var _ = require('lodash')
+      var startDate = this.result
+      //  function (Reser) { return Reser.date })
+      return _.filter(this.liness, function (Reser) {
+        if (_.isNull(startDate)) {
+          return true
+        } else {
+          return Reser.generateQRs === startDate
+        }
+      })
+    },
     shownUUID: function () {
       var newGuid = this.GUID
       return newGuid

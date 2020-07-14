@@ -8,6 +8,7 @@ import * as firebase from 'firebase/app'
 // Add the Firebase services that you want to use
 import 'firebase/auth'
 import 'firebase/firestore'
+import 'firebase/storage'
 
 Vue.use(VueFirestore, {
   key: 'id', // the name of the property. Default is '.key'.
@@ -32,4 +33,4 @@ let firebaseDb = firebaseApp.firestore()
 let firestore = firebaseApp.firestore()
 let firefirestore = firebase.firestore
 
-export { firebaseAuth, firebaseDb, firestore, firefirestore }
+export { firebaseAuth, firebaseDb, firestore, firefirestore, firebaseApp }

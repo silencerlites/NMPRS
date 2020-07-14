@@ -101,35 +101,16 @@
       <template>
         <div class="col-xs-12 col-sm-12 col-md-12 q-pb-sm q-pr-sm">
           <q-table
+          :pagination="pagination"
             :data="Rate"
             :columns="columns"
             row-key="id"
-            :pagination="pagination"
           >
            <template v-slot:body="props">
               <q-tr :props="props">
                 <q-td :props="props" key="Name">{{ props.row.Name }}</q-td>
                 <q-td :props="props" key="Rating">{{ props.row.TotalRate }}</q-td>
                 <q-td :props="props" key="Rating">{{ props.row.CommentSuggestion }}</q-td>
-                <q-td auto-width key="action">
-                  <q-btn
-                    dense
-                    round
-                    flat
-                    color="orange"
-                    icon="edit"
-                    @click="(modalbtn = 'edit'), editModal(props.row)"
-                    v-if="props.row.StatusArrival == 'Pending'"
-                  >
-                    <q-tooltip content-class="bg-primary">Edit / Reschedule</q-tooltip>
-                  </q-btn>
-                  <q-btn dense round flat color="red" @click="canalert(props.row)" icon="cancel_schedule_send" v-if="props.row.StatusArrival == 'Pending'">
-                    <q-tooltip content-class="bg-primary">Cancel Reservation</q-tooltip>
-                  </q-btn>
-                  <q-btn dense round flat color="red" @click="delalert(props.row)" icon="delete">
-                    <q-tooltip content-class="bg-primary">Delete</q-tooltip>
-                  </q-btn>
-                </q-td>
               </q-tr>
             </template>
           </q-table>
@@ -213,8 +194,7 @@ export default {
           field: 'Comment',
           sortable: true,
           style: 'max-width: 10px'
-        },
-        { name: 'actions', label: 'Actions', field: '', align: 'center' }
+        }
       ]
     }
   },

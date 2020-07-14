@@ -14,23 +14,14 @@
         <q-toolbar-title>
           National Museum of the Philippines
         </q-toolbar-title>
-
         <q-separator vertical inset />
-         <q-btn color="white" flat icon="help" />
-        <q-separator vertical inset />
-          <q-btn-dropdown avatar flat no-caps color="white" icon="perm_identity">
+          <q-btn-dropdown avatar flat no-caps color="white" icon="perm_identity" >
             <q-list>
-              <q-item clickable v-close-popup @click="onItemClick" to="/adminSide/accounts/manage">
+              <q-item clickable v-close-popup @click="onItemClick" to="/customerSide/accounts/manage">
                 <q-item-section>
                   <q-item-label>Manage Account</q-item-label>
                 </q-item-section>
               </q-item>
-              <!-- <q-separator color="#bdc3c7"/>
-              <q-item clickable v-close-popup @click="onItemClick" to="/adminSide/setting">
-                <q-item-section>
-                  <q-item-label >Setting</q-item-label>
-                </q-item-section>
-              </q-item> -->
               <q-separator color="#bdc3c7"/>
               <q-item clickable v-close-popup @click="onItemClick">
                 <q-item-section>
@@ -63,6 +54,9 @@
 
     </div>
         </q-item-label>
+
+          <q-separator  />
+
         <EssentialLink
           v-for="link in essentialLinks"
           :key="link.title"
@@ -78,7 +72,7 @@
 </template>
 
 <script>
-import { firebaseAuth, firestore } from 'boot/firebase'
+import { firebaseAuth } from 'boot/firebase'
 import EssentialLink from 'components/EssentialLink'
 import { mapState } from 'vuex'
 
@@ -89,13 +83,6 @@ export default {
     EssentialLink
   },
 
-  firestore () {
-    const user = firebaseAuth.currentUser
-    return {
-      UserAccount: firestore.collection('Users').doc(user.uid)
-    }
-  },
-
   data () {
     return {
       UserAccount: {
@@ -104,61 +91,20 @@ export default {
           LastName: null
         }
       },
+      email: null,
       leftDrawerOpen: false,
       essentialLinks: [
         {
-          title: 'Dashboard',
-          icon: 'home',
-          link: '/adminSide',
-          iconcolor: 'blue'
-        },
-        {
-          title: 'Reservation',
+          title: 'My Reservation',
           icon: 'event_note',
-          link: '/adminSide/reservation',
+          link: '/customerSide',
           iconcolor: 'red'
         },
         {
-          title: 'Visitors Log',
-          iconcolor: 'green',
-          icon: 'menu_book',
-          link: '/adminSide/visitorslog'
-        },
-        {
-          title: 'Ratings & Comments',
-          iconcolor: 'orange',
-          icon: 'grade',
-          link: '/adminSide/survey'
-        },
-        {
-          title: 'Billing & Payment',
+          title: 'My Billing',
           iconcolor: 'indigo',
           icon: 'description',
-          link: '/adminSide/billing'
-        },
-        {
-          title: 'Scanner QR Ticket',
-          iconcolor: 'black',
-          icon: 'qr_code_scanner',
-          link: '/adminSide/scanqr'
-        },
-        {
-          title: 'Accounts',
-          iconcolor: 'light-blue',
-          icon: 'perm_identity',
-          link: '/adminSide/accounts'
-        },
-        {
-          title: 'Reports',
-          iconcolor: 'purple',
-          icon: 'assignment',
-          link: '/adminSide/reports'
-        },
-        {
-          title: 'File Maintenance',
-          iconcolor: 'red',
-          icon: 'folder',
-          link: '/adminSide/setting'
+          link: '/customerSide/MyBilling'
         }
       ]
     }
@@ -178,8 +124,6 @@ export default {
     ...mapState('storetasks', ['userDetails'])
   },
   created () {
-    var user = firebaseAuth.currentUser
-    this.email = user.email
   }
 }
 </script>

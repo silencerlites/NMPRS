@@ -20,7 +20,7 @@
         <q-separator vertical inset />
           <q-btn-dropdown avatar flat no-caps color="white" icon="perm_identity">
             <q-list>
-              <q-item clickable v-close-popup @click="onItemClick" to="/adminSide/accounts/manage">
+              <q-item clickable v-close-popup @click="onItemClick" to="/reservationSide/accounts/manage">
                 <q-item-section>
                   <q-item-label>Manage Account</q-item-label>
                 </q-item-section>
@@ -109,56 +109,44 @@ export default {
         {
           title: 'Dashboard',
           icon: 'home',
-          link: '/adminSide',
+          link: '/reservationSide',
           iconcolor: 'blue'
         },
         {
           title: 'Reservation',
           icon: 'event_note',
-          link: '/adminSide/reservation',
+          link: '/reservationSide/reservation',
           iconcolor: 'red'
         },
         {
           title: 'Visitors Log',
           iconcolor: 'green',
           icon: 'menu_book',
-          link: '/adminSide/visitorslog'
+          link: '/reservationSide/visitorslog'
         },
         {
           title: 'Ratings & Comments',
           iconcolor: 'orange',
           icon: 'grade',
-          link: '/adminSide/survey'
+          link: '/reservationSide/survey'
         },
         {
           title: 'Billing & Payment',
           iconcolor: 'indigo',
           icon: 'description',
-          link: '/adminSide/billing'
+          link: '/reservationSide/billing'
         },
         {
           title: 'Scanner QR Ticket',
           iconcolor: 'black',
           icon: 'qr_code_scanner',
-          link: '/adminSide/scanqr'
-        },
-        {
-          title: 'Accounts',
-          iconcolor: 'light-blue',
-          icon: 'perm_identity',
-          link: '/adminSide/accounts'
+          link: '/reservationSide/scanqr'
         },
         {
           title: 'Reports',
           iconcolor: 'purple',
           icon: 'assignment',
-          link: '/adminSide/reports'
-        },
-        {
-          title: 'File Maintenance',
-          iconcolor: 'red',
-          icon: 'folder',
-          link: '/adminSide/setting'
+          link: '/reservationSide/reports'
         }
       ]
     }

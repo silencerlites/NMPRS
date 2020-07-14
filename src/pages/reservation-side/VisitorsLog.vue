@@ -201,15 +201,6 @@
                     @click="(modalbtn = 'edit'), editModal(props.row)"
                   ></q-btn>
 
-                  <q-btn
-                    v-if="props.row.visitorType == 'walk-in'"
-                    dense
-                    round
-                    flat
-                    color="red"
-                    @click="delalert(props.row)"
-                    icon="delete"
-                  ></q-btn>
                 </q-td>
               </q-tr>
             </template>
@@ -237,37 +228,6 @@
         </q-card-section>
       </q-card>
     </div>-->
-    <q-dialog v-model="alertDelete">
-      <q-card>
-        <q-card-section>
-          <img
-            src="statics/undraw_throw_away_ldjd.svg"
-            alt
-            style="height:250px"
-            class="q-pa-lg"
-          />
-        </q-card-section>
-
-        <q-card-section class="q-pt-none">
-          <div class="text-h4 text-center">Are you Sure?</div>
-          <div class="text-h9 text-center">
-            You won't be able to revert this!
-          </div>
-        </q-card-section>
-
-        <q-card-actions align="center" class="q-pa-md q-pb-lg">
-          <q-btn
-            v-model="delbtn"
-            v-close-popup
-            color="primary"
-            label="Yes, delete it!"
-            @click="deleteRow()"
-            class="col-5"
-          />
-          <q-btn v-close-popup color="red" label="Cancel" class="col-5" />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
 
     <q-dialog v-model="viewList">
       <q-card

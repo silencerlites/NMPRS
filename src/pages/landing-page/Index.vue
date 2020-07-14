@@ -5,115 +5,129 @@
         <img src="statics/Untitled-1.svg" alt style="height:auto" />
       </div>
 
+     <div
+        class="col-xs-12 col-sm-6 col-md-6 q-pl-xl q-pr-xl"
+        style="font-size:20px;  padding-top:40px"
+      >
+        <div style="text-align:left; font-size:40px"> <b>Sign up for a Tour</b></div>
+        <div style="color:#0097e6">Personal Information</div>
+        <div class="q-pt-md" style="text-align:center; position:block;">
+          <div class="row">
+                    <div class="col-6 q-pr-md q-pb-md">
+
+                      <q-input outlined label="First name" :dense="dense" v-model="userAccount.Name.FirstName" />
+                    </div>
+                    <div class="col-6">
+                      <q-input outlined  label="Last name" :dense="dense" v-model="userAccount.Name.LastName" />
+                    </div>
+                     <div class="col-12 q-pb-md">
+                        <q-input
+                  outlined
+                 v-model="userAccount.ContactNumber"
+                  mask="(+63) #### - ######"
+                  unmasked-value
+                  label="Contact Number"
+                  :dense="dense"
+
+                  />
+
+                  </div>
+                  </div>
+
+                  <div style="color:#0097e6; text-align:left; padding-bottom:18px;">User Account</div>
+                    <div class="row">
+                     <div class="col-12 q-pb-md">
+                    <q-input outlined v-model="Email" type="email" label="Email" :dense="dense" />
+                  </div>
+                  <div class="col-12 q-pb-md">
+                    <q-input outlined v-model="Password" type="password" label="Password" :dense="dense"  />
+                  </div>
+                  </div>
+          <q-btn
+            color="primary"
+            label="Get Started"
+            style="width:200px; height:60px; font-size:20px;"
+            @click="RegistrationUser"
+          />
+        </div>
+      </div>
+
     </div>
   </q-page>
 </template>
 
 <script>
 
-import { firestore } from 'boot/firebase'
+import { firebaseAuth, firebaseDb } from 'boot/firebase'
 
 export default {
   name: 'PageIndex',
-  components: {
-
-  },
+  components: {},
   data () {
     return {
-      addReg: false,
-      step: 1,
-      date: '',
-      data: [
+      data: [],
+      userAccount: {
+        Name: {
+          FirstName: null,
+          LastName: null
+        },
+        ContactNumber: null
+      },
+      Email: '',
+      Password: null
+    }
+  },
 
-      ],
-      Reserve: {
-        title: null,
-        start: '',
-        color: null,
-        Museum: {
-          Building: [],
-          Times: []
-        },
-        NumberofVisitor: {
-          Adult: {
-            M: null,
-            F: null
-          },
-          Student: {
-            Elementary: {
-              M: null,
-              F: null
-            },
-            HighSchool: {
-              M: null,
-              F: null
-            },
-            SeniorHighSchool: {
-              M: null,
-              F: null
-            },
-            College: {
-              M: null,
-              F: null
-            }
-          },
-          SeniorCitizen: {
-            M: null,
-            F: null
-          },
-          Toddler: {
-            M: null,
-            F: null
-          }
-        },
-        ConUser: {
-          Name: null,
-          ConNum: null,
-          Email: null
-        },
-        StatusArrival: false
-      }
-    }
-  },
-  firestore () {
-    return {
-      reservations: firestore.collection('Reservation'),
-      Building: firestore.collection('MuseumBuilding'),
-      OperationHours: firestore.collection('OperationHours')
-    }
-  },
   methods: {
-    addReservation () {
+    async RegistrationUser (customClaims) {
       this.modalbtn = 'add'
-      if (this.step === 4) {
-        try {
-          // this.$firestore.contactPerson.add(this.ConUser)
-          this.$firestore.reservations.add(this.Reserve)
-          this.$q.notify({
-            message: 'Successfully Added',
-            color: 'green-4',
-            textColor: 'white',
-            icon: 'cloud_done'
+      try {
+        firebaseAuth
+          .createUserWithEmailAndPassword(this.Email, this.Password)
+          .then(cred => {
+            console.log(cred.user.uid)
+            firebaseDb
+              .collection('Users')
+              .doc(cred.user.uid)
+              .set({
+                DateCreated: Date.now(),
+                Name: {
+                  FirstName: this.userAccount.Name.FirstName,
+                  LastName: this.userAccount.Name.LastName
+                },
+                ContactNumber: this.userAccount.ContactNumber
+              })
+            this.$q.notify({
+              message: 'Thank you for register',
+              color: 'green-4',
+              textColor: 'white',
+              icon: 'cloud_done'
+            })
+            firebaseAuth.signOut()
+            this.userAccount.Name.FirstName = null
+            this.userAccount.Name.LastName = null
+            this.userAccount.ContactNumber = null
+            this.Email = null
+            this.Password = null
           })
-        } catch (error) {
-          this.$q.notify({
-            message: 'Data Failed' + error,
-            color: 'red',
-            textColor: 'white',
-            icon: 'clear'
+          .catch(function (error) {
+            // Handle Errors here.
+            var errorCode = error.code
+            var errorMessage = error.message
+            if (errorCode === 'auth/weak-password') {
+              alert('The password is too weak.')
+            } else {
+              alert(errorMessage)
+            }
           })
-        }
+      } catch (error) {
+        this.$q.notify({
+          message: 'Please type the input fields',
+          color: 'red',
+          textColor: 'white',
+          icon: 'clear'
+        })
       }
-    },
-    dateRuleOptions (Reserve) {
-      var today = new Date()
-      // eslint-disable-next-line no-unused-vars
-      var year = new Date()
-      var dd = String(today.getDate()).padStart(2, '0')
-      var mm = String(today.getMonth() + 1).padStart(2, '0')
-      var yyyy = today.getFullYear()
-      today = yyyy + '/' + mm + '/' + dd
-      return Reserve > today && Reserve <= '3000/03/15'
     }
   }
 }

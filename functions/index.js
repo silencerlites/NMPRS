@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 const functions = require("firebase-functions");
 const stripe = require("stripe")("sk_test_KbmqnhSkvzk5Dxjkk4x7b2Ew00LjxBSfRs");
 const cors = require("cors")({ origin: true });
@@ -8,6 +9,11 @@ const cors = require("cors")({ origin: true });
 // exports.helloWorld = functions.https.onRequest((request, response) => {
 //  response.send("Hello from Firebase!");
 // });
+const admin = require('firebase-admin')
+
+admin.initializeApp()
+
+const db = admin.firestore()
 
 exports.createStripeCharge = functions.firestore
   .document("Payment/{pushId}")
@@ -41,3 +47,51 @@ function userFacingMessage(error) {
     ? error.message
     : "An error occurred, developers have been alerted";
 }
+
+exports.AddUserRole = functions.auth.user().onCreate(async (authUser) => {
+
+  if (authUser.email) {
+    const customClaims = {
+      Customer: true,
+    };
+    try {
+      var _ = await admin.auth().setCustomUserClaims(authUser.uid, customClaims)
+
+      return db.collection("Users").doc(authUser.uid).update({
+        email: authUser.email,
+        role: customClaims
+      })
+
+    } catch (error) {
+      console.log(error)
+    }
+
+
+  }
+
+  // return db.collection("roles").doc(user.uid).set({
+  //   email: user.email,
+  //   subscriber: true
+  // }).catch(error => {
+  //   console.log(error)
+  // })
+
+});
+
+exports.setUserRole = functions.https.onCall(async (data, context) => {
+
+  if (!context.auth.token.Administrator) return
+
+
+  try {
+    var _ = await admin.auth().setCustomUserClaims(data.uid, data.role)
+
+    return db.collection("Users").doc(data.uid).update({
+      role: data.role
+    })
+
+  } catch (error) {
+    console.log(error)
+  }
+
+});
