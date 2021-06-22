@@ -1,6 +1,6 @@
 # NPM (nmp)
 
-Online Reservation and Visitors Kiosk System for National Museum of the Philippines
+Online Reservation and Visitors Kiosk System 
 
 ## Install the dependencies
 ```bash
