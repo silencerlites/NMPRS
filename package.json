@@ -19,7 +19,7 @@
     "@fullcalendar/timegrid": "^4.4.2",
     "@fullcalendar/vue": "^4.4.2",
     "@quasar/extras": "^1.8.2",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "firebase": "^7.15.4",
     "firebase-functions": "^3.7.0",
     "lodash": "^4.17.15",
